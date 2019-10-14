@@ -33,6 +33,24 @@ namespace JustEatIt
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication().AddFacebook(opt =>
+            {
+                opt.AppId = Configuration["Authentication:Facebook:AppId"];
+                opt.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            }).AddTwitter(opt =>
+            {
+                opt.ConsumerKey = Configuration["Authentication:Twitter:ConsumerAPIKey"];
+                opt.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+            }).AddGoogle(opt =>
+            {
+                opt.ClientId = Configuration["Authentication:Google:ClientId"];
+                opt.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            }).AddMicrosoftAccount(opt =>
+            {
+                opt.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                opt.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -62,10 +62,59 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
+img, embed, video, object {
+    max-width: 100%;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 40px; /* Vertically center the text there */
+}
+
+.bg-green {
+    background-color: #053F10;
+}
+
+.home-img-container {
+    display: inline-flex!important; 
+    height: 80vh!important;
+}
+
+.intro {
+    width: 30%;
+    margin: auto;
+}
+
+.detail-row {
+    width: 50%;
+    margin: 60px auto 60px auto;
+    text-align: left;
+}
+
+.contact-us {
+    width: 60%;
+    margin: 40px auto 30px;
+}
+
+.home-hr {
+    border: dotted #b4aaaa 8px;
+    border-bottom: none;
+    width: 4%;
+    margin: 40px auto;
+}
+
+.home-waste-img {
+    width: 25%;
+    float: left;
+    margin-right: 30px;
+}
+
+.home-food-img {
+    width: 25%;
+    float: right;
+    margin-left: 30px;
 }
