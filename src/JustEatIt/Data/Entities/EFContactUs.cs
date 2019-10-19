@@ -9,9 +9,9 @@ namespace JustEatIt.Data.Entities
 {
     public class EFContactUsRepository : IContactUsRepository
     {
-        private ApplicationDbContext context;
+        private AppDataDbContext context;
 
-        public EFContactUsRepository(ApplicationDbContext context)
+        public EFContactUsRepository(AppDataDbContext context)
         {
             this.context = context;
         }
