@@ -29,9 +29,9 @@ namespace JustEatIt
         {
             services.AddMvc();
             services.AddDbContext<AppIdentityDbContext>(opts =>
-                opts.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ApplicationDbContext>(opts =>
-                opts.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
