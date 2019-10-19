@@ -28,11 +28,14 @@ namespace JustEatIt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<AppIdentityDbContext>(opts =>
+                opts.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+            services.AddDbContext<ApplicationDbContext>(opts =>
+                opts.UseSqlServer(Configuration.GetConnectionString("ApplicationConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
             // Verify which keys is available and add authentication for them
             if ((Configuration["Authentication:Facebook:AppId"] != null) && (Configuration["Authentication:Facebook:AppSecret"] != null))
