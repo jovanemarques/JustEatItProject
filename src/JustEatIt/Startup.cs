@@ -28,16 +28,53 @@ namespace JustEatIt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>(opts =>
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDataDbContext>(opts =>
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Verify which keys is available and add authentication for them
+            if ((Configuration["Authentication:Facebook:AppId"] != null) && (Configuration["Authentication:Facebook:AppSecret"] != null))
+            {
+                services.AddAuthentication().AddFacebook(opt =>
+                {
+                    opt.AppId = Configuration["Authentication:Facebook:AppId"];
+                    opt.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                });
+            }
+            if ((Configuration["Authentication:Twitter:ConsumerAPIKey"] != null) && (Configuration["Authentication:Twitter:ConsumerSecret"] != null))
+            {
+                services.AddAuthentication().AddTwitter(opt =>
+                {
+                    opt.ConsumerKey = Configuration["Authentication:Twitter:ConsumerAPIKey"];
+                    opt.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+                });
+            }
+            if ((Configuration["Authentication:Google:ClientId"] != null) && (Configuration["Authentication:Google:ClientSecret"] != null))
+            {
+                services.AddAuthentication().AddGoogle(opt =>
+                {
+                    opt.ClientId = Configuration["Authentication:Google:ClientId"];
+                    opt.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });
+            }
+            if ((Configuration["Authentication:Microsoft:ClientId"] != null) && (Configuration["Authentication:Microsoft:ClientSecret"] != null))
+            {
+                services.AddAuthentication().AddMicrosoftAccount(opt =>
+                {
+                    opt.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                    opt.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                });
+            }
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -48,7 +85,6 @@ namespace JustEatIt
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();

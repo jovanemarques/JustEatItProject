@@ -1,0 +1,27 @@
+﻿
+<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+    <div>
+        <p>
+            @foreach (var provider in Model.ExternalLogins)
+            {
+                string provName = provider.Name.ToLower();
+
+                <p>
+                @if ((provName == "facebook") || (provName == "google") || (provName == "twitter") || (provName == "microsoft"))
+                {
+                    <button type="submit" class="btn-ext-login btn-@provName" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                        <i class="fab fa-@provName fa-fw"></i> Login with @provider.DisplayName
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn-ext-login btn-not-defined" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                        Login with @provider.DisplayName
+                    </button>
+                }
+                </p>
+            }
+        </p>
+    </div>
+</form>
+
