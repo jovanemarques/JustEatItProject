@@ -33,5 +33,10 @@ namespace JustEatIt.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
     }
 }

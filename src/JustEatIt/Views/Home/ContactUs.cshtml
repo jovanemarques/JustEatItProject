@@ -1,0 +1,42 @@
+﻿@model JustEatIt.Models.ContactUs
+
+@{
+    ViewData["Title"] = "Get In Touch";
+}
+
+<div class="text-center contact-us">
+    <h1>Get In Touch</h1>
+
+    <h4>Got a question? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</h4>
+    <hr class="home-hr" />
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Home" asp-action="ContactUs">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name*</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label">Email address*</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Message" class="control-label">Message (Max 2000 characters)</label>
+                <textarea asp-for="Message" class="form-control" maxlength="2000" cols="60" rows="4"></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send Message" class="btn btn-primary form-control" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
