@@ -12,6 +12,7 @@ using JustEatIt.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using JustEatIt.Models;
 
 namespace JustEatIt
 {
@@ -27,6 +28,7 @@ namespace JustEatIt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IRepository, MockRepository>();
             services.AddMvc();
             services.AddDbContext<ApplicationDbContext>(opts =>
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

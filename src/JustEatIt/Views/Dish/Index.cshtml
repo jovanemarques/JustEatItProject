@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Dish>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Dishes</h1>
+
+@foreach (Dish dish in Model)
+{
+    <div>
+        <img src="@dish.Image" width="70px" /> <h2>@dish.Description </h2> Best Before: @dish.BestBefore Qty: @dish.Quantity Price: @dish.Price
+    </div>
+}
+
