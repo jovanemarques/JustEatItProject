@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Dishes";
+}
+
+<h1>Choose your next great meal</h1>
+
+<div id="map" style="height:600px"></div>
+<script>
+    var map;
+    var toronto = { lat: 43.6532, lng: -79.3832 };
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: toronto,
+          zoom: 8
+        });
+        var iconFood = '~/images/map/pin-map-location-19-50.png';
+        var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">Partner</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>Partner</b> and the details of the Partner.</p>'+
+            '</div>'+
+            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        var marker = new google.maps.Marker({ position: toronto, icon: iconFood, map: map });
+
+        marker.addListener('click', function() {
+            infowindow.open(map, marker);
+        });
+      }
+</script>
+Location: <input type="text" /> <input type="button" value="Map" /> <input type="button" value="List" />
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEWhmZWq1kyojM46KzO-yZOYsw4jdkP6w&callback=initMap" async defer></script>
