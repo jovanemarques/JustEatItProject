@@ -10,15 +10,15 @@ namespace JustEatIt.Controllers
 {
     public class DishController : Controller
     {
-        IRepository repository;
-        public DishController(IRepository repo)
+        IDishRepository dishRepo;
+        public DishController(IDishRepository dishRepository)
         {
-            repository = repo;
+            dishRepo = dishRepository;
         }
         // GET: Dish
         public ActionResult Index()
         {
-            return View(repository.Dishes);
+            return View(dishRepo.GetAll);
         }
 
         // GET: Dish/Details/5
@@ -53,7 +53,8 @@ namespace JustEatIt.Controllers
         // GET: Dish/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            //find the object
+            return View("Create");
         }
 
         // POST: Dish/Edit/5

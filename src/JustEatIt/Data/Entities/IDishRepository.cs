@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace JustEatIt.Models
 {
-    public interface IRepository
+    public interface IDishRepository
     {
-        IQueryable<Dish> Dishes { get; }
+        IQueryable<Dish> GetAll { get; }
+        Dish Save(Dish dish);
+        Dish Delete(int dishId);
     }
 }
