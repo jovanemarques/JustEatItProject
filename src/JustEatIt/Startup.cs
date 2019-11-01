@@ -12,8 +12,6 @@ using JustEatIt.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using JustEatIt.Models;
-using JustEatIt.Data.Entities;
 
 namespace JustEatIt
 {
@@ -29,14 +27,11 @@ namespace JustEatIt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDishRepository, EFDishRepository>();
             services.AddMvc();
             services.AddDbContext<ApplicationDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<AppDataDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
