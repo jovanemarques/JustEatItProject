@@ -18,6 +18,20 @@ namespace JustEatIt.Controllers
         // GET: Dish
         public ActionResult Index()
         {
+            // check if user is custumer or partner and redirect to right page
+            return View("IndexCustomer");
+            //return View("IndexPartner");
+        }
+
+        public ActionResult IndexPartner()
+        {
+            // check user and redirect to right page
+            return View(dishRepo.GetAll);
+        }
+
+        public ActionResult IndexCustomer()
+        {
+            // check user and redirect to right page
             return View(dishRepo.GetAll);
         }
 
@@ -36,12 +50,11 @@ namespace JustEatIt.Controllers
         // POST: Dish/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create([FromForm]Dish dish)
         {
             try
             {
-                // TODO: Add insert logic here
-
+                dishRepo.Save(dish);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -51,45 +64,21 @@ namespace JustEatIt.Controllers
         }
 
         // GET: Dish/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int dishId)
         {
-            //find the object
-            return View("Create");
-        }
-
-        // POST: Dish/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Dish/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
+            dishRepo.GetAll.Where(d => d.Id == dishId);
+            return View("Create", dishRepo.GetAll.First());
         }
 
         // POST: Dish/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int dishId)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                Dish dish = dishRepo.Delete(dishId);
+                return RedirectToAction(nameof(Index), dish);
             }
             catch
             {
