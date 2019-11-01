@@ -17,5 +17,6 @@ namespace JustEatIt.Data
         }
 
         public DbSet<ContactUs> ContactUs { get; set; }
+        public DbSet<Dish> Dish { get; set; }
     }
 }
