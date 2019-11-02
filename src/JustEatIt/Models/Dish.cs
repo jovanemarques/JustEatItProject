@@ -17,6 +17,6 @@ namespace JustEatIt.Models
         public string Image { get; set; }
         public string Type { get; set; }
         public string Restaurant { get; set; }
-        public IdentityUser Partner { get; set; }
+        public Partner Partner { get; set; }
     }
 }
