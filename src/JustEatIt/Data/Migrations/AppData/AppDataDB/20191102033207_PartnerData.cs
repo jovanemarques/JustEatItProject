@@ -8,28 +8,15 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "IdentityUser",
+                name: "Partner",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    Rate = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IdentityUser", x => x.Id);
+                    table.PrimaryKey("PK_Partner", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,9 +39,9 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 {
                     table.PrimaryKey("PK_Dish", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dish_IdentityUser_PartnerId",
+                        name: "FK_Dish_Partner_PartnerId",
                         column: x => x.PartnerId,
-                        principalTable: "IdentityUser",
+                        principalTable: "Partner",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -71,7 +58,7 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 name: "Dish");
 
             migrationBuilder.DropTable(
-                name: "IdentityUser");
+                name: "Partner");
         }
     }
 }
