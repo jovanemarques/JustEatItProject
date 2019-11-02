@@ -5,6 +5,11 @@
     <UserSecretsId>aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
