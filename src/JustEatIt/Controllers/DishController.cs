@@ -52,22 +52,15 @@ namespace JustEatIt.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([FromForm]Dish dish)
         {
-            try
-            {
-                dishRepo.Save(dish);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            dishRepo.Save(dish);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Dish/Edit/5
         public ActionResult Edit(int dishId)
         {
-            dishRepo.GetAll.Where(d => d.Id == dishId);
-            return View("Create", dishRepo.GetAll.First());
+            IQueryable<Dish> dishes = dishRepo.GetAll.Where(d => d.Id == dishId);
+            return View("Create", dishes.First());
         }
 
         // POST: Dish/Delete/5
@@ -75,15 +68,8 @@ namespace JustEatIt.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int dishId)
         {
-            try
-            {
-                Dish dish = dishRepo.Delete(dishId);
-                return RedirectToAction(nameof(Index), dish);
-            }
-            catch
-            {
-                return View();
-            }
+            Dish dish = dishRepo.Delete(dishId);
+            return RedirectToAction(nameof(Index), dish);
         }
     }
 }
