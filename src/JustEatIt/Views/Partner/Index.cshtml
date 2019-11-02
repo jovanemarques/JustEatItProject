@@ -1,45 +1,44 @@
-﻿@model IEnumerable<Dish>
-@{
-    ViewData["Title"] = "Dishes";
+﻿@{
+    ViewData["Title"] = "Partner Dashboard";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-10">
-            <h1>Dishes</h1>
-        </div>
-        <div class="col-2">
-            <form method="get" asp-controller="Dish" asp-action="Create">
-                <button type="submit" class="btn btn-success">Add New</button>
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            @foreach (Dish dish in Model)
-            {
-                <div class="container">
-                    <div class="row">
-                        <div class="col-1">
-                            <img src=@Url.Content("https://justeatit.s3.ca-central-1.amazonaws.com/" + @dish.Id) alt="@dish.Description" class="img-thumbnail" width="100" />
-                        </div>
-                        <div class="col-10">
-                            <b>@dish.Name</b> - @dish.Description <b>Best Before:</b> @dish.BestBefore <b>Qty:</b> @dish.Quantity <b>Price:</b> @dish.Price
-                        </div>
-                        <div class="col-1">
-                            <form asp-action="Edit" method="post">
-                                <input type="hidden" name="dishId" value="@dish.Id" />
-                                <button class="btn btn-lg fa fa-edit" style="background-color:transparent;" type="submit" />
-                            </form>
-                            <form asp-action="Delete" method="post">
-                                <input type="hidden" name="dishId" value="@dish.Id" />
-                                <button class="btn btn-lg fa fa-trash-alt" style="background-color:transparent;" type="submit" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-            }
-        </div>
+<h1 class="text-center">Dashboard for @DateTime.Now.ToString("MMM dd, yyyy")</h1>
+<hr />
+<h3 class="text-center">Dish availability</h3>
+<div class="row">
+    <div id="ordersChart" class="col-md-6"></div>
+    <div class="col-md-6">
+        <a class="my-lg-5 btn btn-success w-100" asp-controller="Dish" asp-action="IndexPartner">Dish list</a>
+        <h3 class="my-lg-5">Dishes on menu: 2</h3>
+        <h3 class="my-lg-5">Pending orders: 19</h3>
+        <h3 class="my-lg-5">Finished orders: 25</h3>
     </div>
 </div>
+<div>
+    <div class="col-md-6">
+
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Dishes', 'Availability'],
+          ['Available',     75],
+          ['Sold',      25]
+        ]);
+
+        var options = {
+            pieHole: 0.4,
+            legend: 'none'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('ordersChart'));
+        chart.draw(data, options);
+      }
+    </script>
+}
