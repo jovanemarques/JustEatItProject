@@ -14,15 +14,19 @@
             </form>
         </div>
     </div>
-<div class="card-deck">
-    @foreach (Dish dish in Model)
-    {
+    <div class="card-deck">
+        @foreach (Dish dish in Model)
+        {
         <div class="card-body">
             <img src="@dish.Image" alt="@dish.Description" class="img-thumbnail" width="100" /> @dish.Description Best Before: @dish.BestBefore Qty: @dish.Quantity Price: @dish.Price
-            <button class="btn btn-lg" style="background-color:transparent;">
-                <a asp-controller="Dish" asp-action="Edit" ><i class="fa fa-edit"></i></a>
-                <a asp-controller="Dish" asp-action="Delete"> <i class="fa fa-trash-alt"></i></a>
-            </button>
+            <form asp-action="Edit" method="post">
+                <input type="hidden" name="dishId" value="@dish.Id" />
+                <button class="btn btn-lg fa fa-edit" style="background-color:transparent;" type="submit" />
+            </form>
+            <form asp-action="Delete" method="post">
+                <input type="hidden" name="dishId" value="@dish.Id" />
+                <button class="btn btn-lg fa fa-trash-alt" style="background-color:transparent;" type="submit" />
+            </form>
         </div>
-    }
-</div>
+        }
+    </div>
