@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Dish>
+@{
+    ViewData["Title"] = "Dishes";
+}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <h1>Dishes</h1>
+            </div>
+            <div class="col-2">
+                <form method="get" asp-controller="Dish" asp-action="Create">
+                    <button type="submit" class="btn btn-success">Add New</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                @foreach (Dish dish in Model)
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-1">
+                                <img src=@Url.Content("https://justeatit.s3.ca-central-1.amazonaws.com/" + @dish.Id) alt="@dish.Description" class="img-thumbnail" width="100" />
+                            </div>
+                            <div class="col-10">
+                                <b>@dish.Name</b> - @dish.Description <b>Best Before:</b> @dish.BestBefore <b>Qty:</b> @dish.Quantity <b>Price:</b> @dish.Price
+                            </div>
+                            <div class="col-1">
+                                <form asp-action="Edit" method="post">
+                                    <input type="hidden" name="dishId" value="@dish.Id" />
+                                    <button class="btn btn-lg fa fa-edit" style="background-color:transparent;" type="submit" />
+                                </form>
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="dishId" value="@dish.Id" />
+                                    <button class="btn btn-lg fa fa-trash-alt" style="background-color:transparent;" type="submit" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                }
+            </div>
+        </div>
+     </div>
