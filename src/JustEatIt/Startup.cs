@@ -10,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using JustEatIt.Models;
-using JustEatIt.Data.Entities;
 
 namespace JustEatIt
 {
@@ -27,11 +26,6 @@ namespace JustEatIt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(opts =>
-<<<<<<< HEAD
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
-            services.AddDbContext<AppDataDbContext>(opts =>
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
-=======
                 //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                 opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddDbContext<AppDataDbContext>(opts =>
@@ -39,9 +33,7 @@ namespace JustEatIt
                 opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
             services.AddTransient<IDishRepository, EFDishRepository>();
->>>>>>> jovane_r1_i2
-
-            services.AddTransient<IDishRepository, EFDishRepository>();
+            services.AddTransient<IPartnerRepository, EFPartnerRepository>();
 
             services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
