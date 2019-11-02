@@ -33,11 +33,7 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                     Image = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     Restaurant = table.Column<string>(nullable: true),
-<<<<<<< HEAD
-                    PartnerId = table.Column<string>(nullable: true),
-=======
                     PartnerId = table.Column<string>(nullable: true)
->>>>>>> jovane_r1_i2
                 },
                 constraints: table =>
                 {

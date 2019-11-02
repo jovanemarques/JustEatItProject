@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿@model Dish
+@model Dish
 @{
     ViewData["Title"] = "Add New Dish";
 }
@@ -53,58 +52,3 @@
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
 </form>
-=======
-﻿@model Dish
-@{
-    ViewData["Title"] = "Add New Dish";
-}
-
-<h1>Add New Dish</h1>
-
-<form asp-controller="Dish" asp-action="Create">
-    <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <input type="text" class="form-control" asp-for="Name" >
-    </div>
-    <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input type="text" class="form-control" asp-for="Description">
-    </div>
-    <div class="form-group">
-        <label asp-for="Price">Price</label>
-        <input type="text" class="form-control"asp-for="Price">
-    </div>
-    <div class="form-group">
-        <label asp-for="Quantity">Quantity</label>
-        <input type="number" class="form-control" asp-for="Quantity" min="1" max="10">
-    </div>
-    <div class="form-group">
-        <label asp-for="BestBefore">BestBefore</label>
-        <input type="date" class="form-control" asp-for="BestBefore">
-    </div>
-    <div class="form-group">
-        <label asp-for="Type">Type</label>
-        <select class="form-control" asp-for="Type">
-            <option>Pizza</option>
-            <option>Sushi</option>
-            <option>Salad</option>
-            <option>Pasta</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="Restaurant">Restaurant</label>
-        <select class="form-control"asp-for="Restaurant">
-            <option>Italian</option>
-            <option>Brazillian</option>
-            <option>Ukranian</option>
-            <option>Indian</option>
-            <option>Franch</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="Image">Image</label>
-        <input type="file" class="form-control-file"asp-for="Image">
-    </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-</form>
->>>>>>> jovane_r1_i2
