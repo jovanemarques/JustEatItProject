@@ -30,7 +30,9 @@ Location:<input type="text" /><input type="button" value="Map" /><input type="bu
             content: contentString
         });
 
-        var marker = new google.maps.Marker({ position: toronto, icon: iconFood, map: map });
+        //custom icon not working with local images
+        //var marker = new google.maps.Marker({ position: toronto, icon: iconFood, map: map });
+        var marker = new google.maps.Marker({ position: toronto, map: map });
 
         marker.addListener('click', function () {
             infowindow.open(map, marker);
