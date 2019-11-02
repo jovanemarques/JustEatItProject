@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using JustEatIt.Data;
+using JustEatIt.Infrastructure.Email_Verification;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,12 +29,15 @@ namespace JustEatIt
             services.AddDbContext<AppDataDbContext>(opts =>
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             // Verify which keys is available and add authentication for them
-            if ((Configuration["Authentication:Facebook:AppId"] != null) && (Configuration["Authentication:Facebook:AppSecret"] != null))
+            if (Configuration["Authentication:Facebook:AppId"] != null && Configuration["Authentication:Facebook:AppSecret"] != null)
             {
                 services.AddAuthentication().AddFacebook(opt =>
                 {
@@ -46,7 +45,7 @@ namespace JustEatIt
                     opt.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
             }
-            if ((Configuration["Authentication:Twitter:ConsumerAPIKey"] != null) && (Configuration["Authentication:Twitter:ConsumerSecret"] != null))
+            if (Configuration["Authentication:Twitter:ConsumerAPIKey"] != null && (Configuration["Authentication:Twitter:ConsumerSecret"] != null))
             {
                 services.AddAuthentication().AddTwitter(opt =>
                 {
@@ -54,7 +53,7 @@ namespace JustEatIt
                     opt.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
                 });
             }
-            if ((Configuration["Authentication:Google:ClientId"] != null) && (Configuration["Authentication:Google:ClientSecret"] != null))
+            if (Configuration["Authentication:Google:ClientId"] != null && Configuration["Authentication:Google:ClientSecret"] != null)
             {
                 services.AddAuthentication().AddGoogle(opt =>
                 {
@@ -62,7 +61,7 @@ namespace JustEatIt
                     opt.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
             }
-            if ((Configuration["Authentication:Microsoft:ClientId"] != null) && (Configuration["Authentication:Microsoft:ClientSecret"] != null))
+            if (Configuration["Authentication:Microsoft:ClientId"] != null && Configuration["Authentication:Microsoft:ClientSecret"] != null)
             {
                 services.AddAuthentication().AddMicrosoftAccount(opt =>
                 {
