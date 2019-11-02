@@ -7,28 +7,28 @@
 
 <form asp-controller="Dish" asp-action="Create">
     <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" name="name">
+        <label asp-for="Name">Name</label>
+        <input type="text" class="form-control" asp-for="Name" >
     </div>
     <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" name="description">
+        <label asp-for="Description">Description</label>
+        <input type="text" class="form-control" asp-for="Description">
     </div>
     <div class="form-group">
-        <label for="price">Price</label>
-        <input type="text" class="form-control" id="price" name="price">
+        <label asp-for="Price">Price</label>
+        <input type="text" class="form-control"asp-for="Price">
     </div>
     <div class="form-group">
-        <label for="quantity">Quantity</label>
-        <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="10">
+        <label asp-for="Quantity">Quantity</label>
+        <input type="number" class="form-control" asp-for="Quantity" min="1" max="10">
     </div>
     <div class="form-group">
-        <label for="bestBefore">BestBefore</label>
-        <input type="date" class="form-control" id="bestBefore" name="bestBefore">
+        <label asp-for="BestBefore">BestBefore</label>
+        <input type="date" class="form-control" asp-for="BestBefore">
     </div>
     <div class="form-group">
-        <label for="type">Type</label>
-        <select class="form-control" id="type" name="type">
+        <label asp-for="Type">Type</label>
+        <select class="form-control" asp-for="Type">
             <option>Pizza</option>
             <option>Sushi</option>
             <option>Salad</option>
@@ -36,8 +36,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="restaurant">Restaurant</label>
-        <select class="form-control" id="restaurant" name="restaurant">
+        <label asp-for="Restaurant">Restaurant</label>
+        <select class="form-control"asp-for="Restaurant">
             <option>Italian</option>
             <option>Brazillian</option>
             <option>Ukranian</option>
@@ -46,8 +46,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" class="form-control-file" id="image" name="image">
+        <label asp-for="Image">Image</label>
+        <input type="file" class="form-control-file"asp-for="Image">
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
 </form>
