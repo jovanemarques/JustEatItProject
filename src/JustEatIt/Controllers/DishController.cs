@@ -14,7 +14,7 @@ namespace JustEatIt.Controllers
         {
             dishRepo = dishRepository;
         }
-        // GET: Dish
+
         public ActionResult Index()
         {
             // check if user is custumer or partner and redirect to right page
@@ -34,19 +34,16 @@ namespace JustEatIt.Controllers
             return View(dishRepo.GetAll);
         }
 
-        // GET: Dish/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Dish/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Dish/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([FromForm]Dish dish)
@@ -81,7 +78,6 @@ namespace JustEatIt.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Dish/Edit/5
         public ActionResult Edit(int dishId)
         {
             IQueryable<Dish> dishes = dishRepo.GetAll;
@@ -90,7 +86,6 @@ namespace JustEatIt.Controllers
             return View("Create", dishes.First());
         }
 
-        // POST: Dish/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int dishId)
