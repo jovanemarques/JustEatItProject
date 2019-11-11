@@ -16,20 +16,25 @@ namespace JustEatIt.Data.Entities
             this.context = context;
         }
 
-        public IQueryable<Partner> GetAll => context.Partner;
+        public IQueryable<Partner> GetAll => context.Partners;
 
         public Partner Save(Partner partner)
         {
             if (partner.Id == "")
             {
-                context.Partner.Add(partner);
+                context.Partners.Add(partner);
             }
             else
             {
-                Partner dbPartner = context.Partner.FirstOrDefault(r => r.Id == partner.Id);
+                Partner dbPartner = context.Partners.FirstOrDefault(r => r.Id == partner.Id);
                 if (dbPartner != null)
                 {
                     dbPartner.Rate = partner.Rate;
+                    dbPartner.Address = partner.Address;
+                    dbPartner.City = partner.City;
+                    dbPartner.PostalCode = partner.PostalCode;
+                    dbPartner.Latitude = partner.Latitude;
+                    dbPartner.Longitude = partner.Longitude;
                 }
             }
             context.SaveChanges();
@@ -38,10 +43,10 @@ namespace JustEatIt.Data.Entities
 
         public Partner Delete(string id)
         {
-            Partner dbPartner = context.Partner.FirstOrDefault(r => r.Id == id);
+            Partner dbPartner = context.Partners.FirstOrDefault(r => r.Id == id);
             if (dbPartner != null)
             {
-                context.Partner.Remove(dbPartner);
+                context.Partners.Remove(dbPartner);
                 context.SaveChanges();
             }
             return dbPartner;
