@@ -4,11 +4,41 @@
     <script>
         var map;
         var markers = [];
-        var toronto = { lat: 43.6532, lng: -79.3832 };
+        var partnersOriginal = [];
+        var partners = [];
         var iconFood = 'http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png';
 
+        /*async function getPartnerData() {
+            let result = await $.post("/Dish/GetDishesByLatLog", { ne: ['-123', '-321'], sw: ['123', '321'] }).promise();
+            partnersOriginal = JSON.parse(result);
+            *//*prom
+            .done(function (result) {
+                partnersOriginal = JSON.parse(result);
+            })
+            .fail(function (err) {
+                alert('error: ' + err);
+            });*//*
+        }*/
+
         //get all partner and its dishes for the bounderies to use on the dinamic search
-        var partnersOriginal = [
+        //await getPartnerData();
+
+        function loadData() {
+            $.post( "/Dish/GetDishesByLatLog", {ne:['-123', '-321'], sw:['123', '321']}, function( result ) {
+                partnersOriginal = JSON.parse(result);
+                $('#divSpinner').css('display', 'none');
+                $('#divSearch').css('display', 'block');
+                partners = partnersOriginal.slice(0);
+                drawMarkers();
+            })
+            .fail(function() {
+              alert('error');
+            });
+        }
+
+
+
+        /*partnersOriginal = [
                 {
                     name:'Pizza Pizza',
                     location: { lat: 43.6532, lng: -79.3832 },
@@ -18,12 +48,12 @@
                     name:'Dominos Pizza',
                     location: { lat: 43.7532, lng: -79.4832 },
                     dishes: ['Cheese Pizza', 'Pepperoni Pizza'],
-                },
-        ];
-        var partners = partnersOriginal.slice(0);
+                }
+        ];*/
 
-        function drawMarkers(){
-            partners.forEach(p => {
+        function drawMarkers() {
+            if (partners) {
+                partners.forEach(p => {
                     // decide how to show the partner and dishes info
                     // insert a link to redirect to the parner page?
                     let contentString = '<div id="content">' +
@@ -48,14 +78,17 @@
                         infowindow.close();
                     });
                 });
-                //var marker = new google.maps.Marker({ position: toronto, map: map });
+            }
+            //var marker = new google.maps.Marker({ position: toronto, map: map });
         }
 
         function refreshMap() {
-            markers.forEach(m => {
-                m.setMap(null);
-                m = null;
-            });
+            let counter = markers.length;
+            for (let i = 0; i < counter; i++) {
+                let mark = markers.pop(i);
+                mark.setMap(null);
+                mark = null;
+            }
             drawMarkers();
         }
         function search(e) {
@@ -68,7 +101,7 @@
                 partnersOriginal.forEach(p => {
                     let dishes = [];
                     p.dishes.forEach(d => {
-                        if (d.indexOf(e.value) > -1) {
+                        if (d.toLowerCase().indexOf(e.value.toLowerCase()) > -1) {
                             dishes.push(d);
                         }
                     });
@@ -86,7 +119,10 @@
         <div class="row">
             <div class="col-12">
                 <h1>Choose your next great meal</h1>
-                <div class="form-group">
+                <div class="spinner-border text-success" role="status" id="divSpinner">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="form-group" id="divSearch" style="display:none;">
                     <label for="search">Choose what you want to eat</label>
                     <input type="text" class="form-control" id="search" placeholder="Write a dish name" onkeyup="search(this);">
                 </div>
@@ -108,12 +144,13 @@
     </div>
         <script>
             function initMap() {
+                var toronto = { lat: 43.6532, lng: -79.3832 };
                 map = new google.maps.Map(document.getElementById('map'),
                 {
                     center: toronto,
                     zoom: 10
                 });
-                drawMarkers();
+                loadData();
             }
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEWhmZWq1kyojM46KzO-yZOYsw4jdkP6w&callback=initMap" async defer></script>

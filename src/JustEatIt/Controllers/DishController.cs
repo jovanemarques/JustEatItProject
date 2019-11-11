@@ -36,16 +36,24 @@ namespace JustEatIt.Controllers
         }
 
         [HttpPost]
-        public String GetDishesByLatLog(String lat, String lng)
+        public String GetDishesByLatLog(String[] ne, String[] sw)
         {
             //return dishes based in the location given
-            return @"[
-                    {
-                        name:'Pizza Pepperoni',
-                        partner_name:'Pizza Pizza',
-                        partner_location:{ lat: 43.6532, lng: -79.3832 }
-                    }
-                ]";
+            String json = "";
+            json += "[";
+            json += "   {";
+            json += "       \"name\":\"Pizza Pizza\",";
+            json += "       \"location\": { \"lat\": 43.6532, \"lng\": -79.3832 },";
+            json += "       \"dishes\": [\"Deluxe Pizza\", \"Pepperoni Pizza\"]";
+            json += "   },";
+            json += "   {";
+            json += "       \"name\":\"Dominos Pizza\",";
+            json += "       \"location\": { \"lat\": 43.7532, \"lng\": -79.4832 },";
+            json += "       \"dishes\": [\"Cheese Pizza\", \"Pepperoni Pizza\"]";
+            json += "   }";
+            json += "]";
+
+            return json;
         }
         public ActionResult Details(int id)
         {
