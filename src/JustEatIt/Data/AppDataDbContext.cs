@@ -11,7 +11,11 @@ namespace JustEatIt.Data
         }
 
         public DbSet<ContactUs> ContactUs { get; set; }
-        public DbSet<Dish> Dish { get; set; }
-        public DbSet<Partner> Partner { get; set; }
+        public DbSet<Dish> Dishes { get; set; }
+        public DbSet<DishType> DishTypes { get; set; }
+        public DbSet<DishAvailability> DishesAvail { get; set; }
+        public DbSet<Partner> Partners { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }
