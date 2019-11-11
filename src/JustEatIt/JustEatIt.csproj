@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\map\**" />
+    <Content Remove="wwwroot\images\map\**" />
+    <EmbeddedResource Remove="wwwroot\images\map\**" />
+    <None Remove="wwwroot\images\map\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.cs" />
     <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.Designer.cs" />
   </ItemGroup>

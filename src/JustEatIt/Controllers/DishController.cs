@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using JustEatIt.Data.Entities;
@@ -34,6 +35,18 @@ namespace JustEatIt.Controllers
             return View(dishRepo.GetAll);
         }
 
+        [HttpPost]
+        public String GetDishesByLatLog(String lat, String lng)
+        {
+            //return dishes based in the location given
+            return @"[
+                    {
+                        name:'Pizza Pepperoni',
+                        partner_name:'Pizza Pizza',
+                        partner_location:{ lat: 43.6532, lng: -79.3832 }
+                    }
+                ]";
+        }
         public ActionResult Details(int id)
         {
             return View();
