@@ -40,6 +40,8 @@ namespace JustEatIt
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IOrderRepository, EFOrderRepository>();
+            services.AddTransient<IDishAvailabilityRepository, EFDishAvailabilityRepository>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             // Verify which keys is available and add authentication for them
@@ -77,7 +79,7 @@ namespace JustEatIt
             }
 
             services.AddMvc();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
 

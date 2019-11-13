@@ -1,14 +1,11 @@
-﻿using JustEatIt.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using JustEatIt.Models;
 
-namespace JustEatIt.Data
+namespace JustEatIt.Data.Entities
 {
-    interface IDishAvailabilityRepository
+    public interface IDishAvailabilityRepository
     {
-        IQueryable<DishAvailability> GetAll { get; }
+        IEnumerable<DishAvailability> GetAll();
 
         long Save(DishAvailability dishAvail);
 

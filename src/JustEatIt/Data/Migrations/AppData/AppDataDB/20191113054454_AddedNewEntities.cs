@@ -24,6 +24,10 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 table: "Dish");
 
             migrationBuilder.DropColumn(
+                name: "Image",
+                table: "Dish");
+
+            migrationBuilder.DropColumn(
                 name: "Price",
                 table: "Dish");
 
@@ -120,14 +124,6 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Image",
-                table: "Dishes",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
                 name: "Description",
                 table: "Dishes",
                 maxLength: 255,
@@ -172,7 +168,7 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 name: "DishesAvail",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
@@ -209,7 +205,7 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Status = table.Column<int>(nullable: false),
                     CustomerId = table.Column<string>(nullable: true)
@@ -229,11 +225,11 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 name: "OrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DishAvailId = table.Column<long>(nullable: true),
+                    DishAvailId = table.Column<int>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
-                    OrderId = table.Column<long>(nullable: true)
+                    OrderId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -396,13 +392,6 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Image",
-                table: "Dish",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(string));
-
-            migrationBuilder.AlterColumn<string>(
                 name: "Description",
                 table: "Dish",
                 type: "nvarchar(max)",
@@ -416,6 +405,12 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "Image",
+                table: "Dish",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<float>(
                 name: "Price",

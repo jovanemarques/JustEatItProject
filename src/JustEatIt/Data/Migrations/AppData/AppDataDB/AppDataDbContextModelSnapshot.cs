@@ -82,10 +82,6 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -109,9 +105,9 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.DishAvailability", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("DiscountPrice")
@@ -158,9 +154,9 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.Order", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CustomerId")
@@ -178,16 +174,16 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.OrderItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("DishAvailId")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("DishAvailId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

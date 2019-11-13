@@ -1,9 +1,7 @@
 ﻿using JustEatIt.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace JustEatIt.Data.Entities
 {
@@ -48,6 +46,11 @@ namespace JustEatIt.Data.Entities
 
             context.SaveChanges();
             return result;
+        }
+
+        public IEnumerable<Order> GetOrdersForCustomer(string customerId)
+        {
+            return context.Orders.Where(order => order.Customer.Id.Equals(customerId)).Include(x => x.Items).ToList();
         }
     }
 }
