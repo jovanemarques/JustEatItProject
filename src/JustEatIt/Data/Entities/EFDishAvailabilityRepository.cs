@@ -19,7 +19,7 @@ namespace JustEatIt.Data.Entities
             return _context.DishesAvail.Include(d => d.Dish).ToList();
         }
 
-        public long Save(DishAvailability dishAvail)
+        public int Save(DishAvailability dishAvail)
         {
             DishAvailability dbDishAvail;
 
@@ -45,6 +45,21 @@ namespace JustEatIt.Data.Entities
             _context.SaveChanges();
 
             return dbDishAvail.Id;
+        }
+
+        public void Update(DishAvailability dishAvailability)
+        {
+            var existingDishAvailability = _context.DishesAvail.FirstOrDefault(da => da.Id == dishAvailability.Id);
+            if (existingDishAvailability != null)
+            {
+                existingDishAvailability.StartDate = dishAvailability.StartDate;
+                existingDishAvailability.EndDate = dishAvailability.EndDate;
+                existingDishAvailability.OriginalPrice = dishAvailability.OriginalPrice;
+                existingDishAvailability.DiscountPrice = dishAvailability.DiscountPrice;
+                existingDishAvailability.Quantity = dishAvailability.Quantity;
+            }
+
+            _context.SaveChanges();
         }
 
         public DishAvailability Delete(int dishAvailId)

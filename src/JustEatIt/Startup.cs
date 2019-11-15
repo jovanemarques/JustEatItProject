@@ -42,6 +42,7 @@ namespace JustEatIt
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IOrderRepository, EFOrderRepository>();
             services.AddTransient<IDishAvailabilityRepository, EFDishAvailabilityRepository>();
+            services.AddTransient<IItemOrderRepository, EFItemOrderRepository>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             // Verify which keys is available and add authentication for them

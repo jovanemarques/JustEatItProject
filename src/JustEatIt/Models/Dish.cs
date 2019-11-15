@@ -6,7 +6,6 @@ namespace JustEatIt.Models
 {
     public class Dish
     {
-        [ForeignKey("DishAvailability")]
         public int Id { get; set; }
         
         [Required]
@@ -16,20 +15,22 @@ namespace JustEatIt.Models
         [Required]
         [StringLength(255)]
         public string Description { get; set; }
-        
-        //[BindNever]
-        //[Required]
-        //public string Image { get; set; }
 
         [NotMapped]
         [Required]
         public IFormFile File { get; set; }
 
+        [ForeignKey("TypeId")]
+        public int TypeId { get; set; }
+
         [Required]
         public DishType Type { get; set; }
 
+        [ForeignKey("Partner")]
+        public string PartnerId { get; set; }
+
         [Required]
-        public Partner Partner { get; set; }
+        public virtual Partner Partner { get; set; }
 
         public virtual  DishAvailability DishAvailability { get; set; }
     }

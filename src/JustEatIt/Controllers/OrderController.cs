@@ -5,6 +5,7 @@ using JustEatIt.Models.ViewModels.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace JustEatIt.Controllers
 {
@@ -14,19 +15,16 @@ namespace JustEatIt.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IDishAvailabilityRepository _dishAvailabilityRepository;
-        private readonly IItemOrderRepository _itemOrderRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
         public OrderController(
             IOrderRepository orderRepository,
             UserManager<IdentityUser> userManager,
-            IDishAvailabilityRepository dishAvailabilityRepository,
-            IItemOrderRepository itemOrderRepository)
+            IDishAvailabilityRepository dishAvailabilityRepository)
         {
             _orderRepository = orderRepository;
             _userManager = userManager;
             _dishAvailabilityRepository = dishAvailabilityRepository;
-            _itemOrderRepository = itemOrderRepository;
         }
 
         [HttpGet]
@@ -56,24 +54,57 @@ namespace JustEatIt.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create(CreateOrder order)
+        public IActionResult Create(CreateOrder createOrder)
         {
-            foreach (var orderItem in order.OrderItems)
+            foreach (var orderItem in createOrder.OrderItems)
             {
                 if (orderItem.Quantity < 0 || orderItem.Quantity > orderItem.DishAvail.Quantity)
                 {
-                    return View(order);
+                    return View(createOrder);
                 }
             }
 
-            var orderItems = order.OrderItems.Where(x => x.Quantity > 0);
+            var orderItems = createOrder.OrderItems.Where(x => x.Quantity > 0).ToList();
+            string userId = _userManager.GetUserId(User);
 
-            foreach (var orderItem in orderItems)
+            var order = new Order
             {
-                _itemOrderRepository.Create(orderItem);
+                CustomerId = userId,
+                Items = orderItems,
+                Status = 0
+            };
+
+            var s = JsonConvert.SerializeObject(order);
+            TempData["order"] = s;
+
+            return View("CreditCard", new CreditCard());
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult OrderDetails(int id)
+        {
+            var order = _orderRepository.GetOrderById(id);
+
+            return View(order);
+        }
+
+        [HttpPost]
+        [Route("creditcard")]
+        public IActionResult ConfirmPayment(CreditCard creditCard)
+        {
+            if (ModelState.IsValid)
+            {
+                if (TempData["order"] is string s)
+                {
+                    var order = JsonConvert.DeserializeObject<Order>(s);
+                    _orderRepository.Create(order);
+                }
+
+                return RedirectToAction("Orders");
             }
 
-            return RedirectToAction("Orders");
+            return View("CreditCard", creditCard);
         }
     }
 }

@@ -5,10 +5,10 @@
 }
 
 <style>
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-        -webkit-appearance: none; 
-        margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     form {
@@ -24,33 +24,36 @@ else
 {
     <h1>CreateOrder</h1>
 
-    <hr/>
+    <hr />
     <div class="row">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @for (var i = 0; i < @Model.OrderItems.Count; i++)
             {
                 <div style="display: none">
-                    @Html.EditorFor(m => m.OrderItems[i].DishAvail, new { @class="hidden" })
+                    @Html.EditorFor(m => m.OrderItems[i].DishAvail, new { @class = "hidden" })
                 </div>
                 <div class="container">
                     <div class="row">
                         <div class="col-1">
                             @*<img src=@Url.Content("https://justeatit.s3.ca-central-1.amazonaws.com/" + @dish.Id) alt="@dish.DishAvail.Dish.Description" class="img-thumbnail" width="100"/>*@
-                            <img src='images/home/food_bag.png' alt="@Model.OrderItems[i].DishAvail.Dish.Description" class="img-thumbnail" width="100"/>
+                            <img src='images/home/food_bag.png' alt="@Model.OrderItems[i].DishAvail.Dish.Description" class="img-thumbnail" width="100" />
                         </div>
-                        <div class="col-10">
+                        <div class="col-8">
                             <b>@Model.OrderItems[i].DishAvail.Dish.Name</b> - @Model.OrderItems[i].DishAvail.Dish.Description
+                        </div>
+                        <div class="col-2 d-flex justify-content-center align-content-center text-center">
+                            Quantity: @Model.OrderItems[i].DishAvail.Quantity
                         </div>
                         <div class="col-1">
                             <input class="form-control" max="@Model.OrderItems[i].DishAvail.Quantity" min="0" asp-for="@Model.OrderItems[i].Quantity" />
                         </div>
                     </div>
                 </div>
-                <hr/>
+                <hr />
             }
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

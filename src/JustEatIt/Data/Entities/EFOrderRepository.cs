@@ -7,50 +7,60 @@ namespace JustEatIt.Data.Entities
 {
     public class EFOrderRepository : IOrderRepository
     {
-        private AppDataDbContext context;
+        private readonly AppDataDbContext _context;
+        private readonly IDishAvailabilityRepository _dishAvailabilityRepository;
 
-        public EFOrderRepository(AppDataDbContext context)
+        public EFOrderRepository(
+            AppDataDbContext context,
+            IDishAvailabilityRepository dishAvailabilityRepository)
         {
-            this.context = context;
+            _context = context;
+            _dishAvailabilityRepository = dishAvailabilityRepository;
         }
 
-        public IQueryable<Order> GetAll => context.Orders
+        public IQueryable<Order> GetAll => _context.Orders
             .Include(i => i.Items)
             .ThenInclude(da => da.DishAvail)
             .ThenInclude(d => d.Dish);
 
-        public long Save(Order order)
+        public int Create(Order order)
         {
-            if (order.Id == 0)
+            _context.AttachRange(order.Items.Select(l => l.DishAvail));
+            var newOrder = _context.Orders.Add(order);
+            _context.SaveChanges();
+
+            foreach (var orderItem in order.Items)
             {
-                context.AttachRange(order.Items.Select(l => l.DishAvail));
-                var newOrder = context.Orders.Add(order);
-                context.SaveChanges();
-                order = newOrder.Entity;
+                orderItem.DishAvail.Quantity -= orderItem.Quantity;
+                _dishAvailabilityRepository.Update(orderItem.DishAvail);
             }
 
-            context.SaveChanges();
-            return order.Id;
+            return newOrder.Entity.Id;
+        }
+
+        public Order GetOrderById(int id)
+        {
+            return _context.Orders.Include(x => x.Items).ThenInclude(c => c.DishAvail.Dish).FirstOrDefault(order => order.Id == id);
         }
 
         public bool UpdateStatus(long orderId, int status)
         {
             bool result = false;
 
-            Order dbOrder = context.Orders.FirstOrDefault(o => o.Id == orderId);
+            Order dbOrder = _context.Orders.FirstOrDefault(o => o.Id == orderId);
             if (dbOrder != null)
             {
                 dbOrder.Status = status;
                 result = true;
             }        
 
-            context.SaveChanges();
+            _context.SaveChanges();
             return result;
         }
 
         public IEnumerable<Order> GetOrdersForCustomer(string customerId)
         {
-            return context.Orders.Where(order => order.Customer.Id.Equals(customerId)).Include(x => x.Items).ToList();
+            return _context.Orders.Where(order => order.Customer.Id.Equals(customerId)).Include(x => x.Items).ToList();
         }
     }
 }

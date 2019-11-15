@@ -7,7 +7,9 @@ namespace JustEatIt.Data.Entities
     {
         IEnumerable<DishAvailability> GetAll();
 
-        long Save(DishAvailability dishAvail);
+        int Save(DishAvailability dishAvail);
+
+        void Update(DishAvailability dishAvailability);
 
         DishAvailability Delete(int dishAvailId);
     }

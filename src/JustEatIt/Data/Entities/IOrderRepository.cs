@@ -8,7 +8,9 @@ namespace JustEatIt.Data.Entities
     {
         IQueryable<Order> GetAll { get; }
 
-        long Save(Order order);
+        int Create(Order order);
+
+        Order GetOrderById(int id);
 
         bool UpdateStatus(long orderId, int status);
 

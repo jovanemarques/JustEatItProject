@@ -29,6 +29,9 @@ namespace JustEatIt.Models
         [Required]
         public int Quantity { get; set; }
 
+        [ForeignKey("Dish")]
+        public int DishId { get; set; }
+
         [Required]
         public virtual Dish Dish { get; set; }
     }
