@@ -14,10 +14,7 @@ namespace JustEatIt.Data.Entities
             _context = context;
         }
 
-        public IEnumerable<DishAvailability> GetAll()
-        {
-            return _context.DishesAvail.Include(d => d.Dish).ToList();
-        }
+        public IQueryable<DishAvailability> GetAll => _context.DishesAvail.Include(d => d.Dish);
 
         public int Save(DishAvailability dishAvail)
         {

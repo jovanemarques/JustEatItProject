@@ -14,15 +14,18 @@ namespace JustEatIt.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IDishRepository _dishRepository;
         private readonly IDishAvailabilityRepository _dishAvailabilityRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
         public OrderController(
             IOrderRepository orderRepository,
             UserManager<IdentityUser> userManager,
+            IDishRepository dishRepository,
             IDishAvailabilityRepository dishAvailabilityRepository)
         {
             _orderRepository = orderRepository;
+            _dishRepository = dishRepository;
             _userManager = userManager;
             _dishAvailabilityRepository = dishAvailabilityRepository;
         }
@@ -40,7 +43,7 @@ namespace JustEatIt.Controllers
         [Route("create")]
         public IActionResult Create()
         {
-            var availableDishes = _dishAvailabilityRepository.GetAll();
+            var availableDishes = _dishAvailabilityRepository.GetAll;
 
             var createOrderViewModel = new CreateOrder();
 
@@ -67,11 +70,19 @@ namespace JustEatIt.Controllers
             var orderItems = createOrder.OrderItems.Where(x => x.Quantity > 0).ToList();
             string userId = _userManager.GetUserId(User);
 
+            if (orderItems.Count() <= 0)
+            {
+                ModelState.AddModelError("", "Select at least one dish.");
+                return RedirectToAction("Create");
+            }
+
             var order = new Order
             {
                 CustomerId = userId,
                 Items = orderItems,
-                Status = 0
+                Status = 1,
+                PartnerId = _dishRepository.GetAll.FirstOrDefault(d => d.Id ==
+                    orderItems.FirstOrDefault().DishAvail.DishId)?.PartnerId
             };
 
             var s = JsonConvert.SerializeObject(order);

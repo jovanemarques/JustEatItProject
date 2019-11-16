@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JustEatIt.Models;
 
 namespace JustEatIt.Data.Entities
 {
     public interface IDishAvailabilityRepository
     {
-        IEnumerable<DishAvailability> GetAll();
+        IQueryable<DishAvailability> GetAll { get; }
 
         int Save(DishAvailability dishAvail);
 

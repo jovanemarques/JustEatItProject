@@ -6,27 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\AppData\**" />
     <Compile Remove="wwwroot\images\map\**" />
+    <Content Remove="Data\Migrations\AppData\**" />
     <Content Remove="wwwroot\images\map\**" />
+    <EmbeddedResource Remove="Data\Migrations\AppData\**" />
     <EmbeddedResource Remove="wwwroot\images\map\**" />
+    <None Remove="Data\Migrations\AppData\**" />
     <None Remove="wwwroot\images\map\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191019030436_AppData_Initial.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191019030436_AppData_Initial.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191102033207_PartnerData.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191102033207_PartnerData.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191110235913_AddedNewEntities.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191110235913_AddedNewEntities.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113053921_AddedNewEntities.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113053921_AddedNewEntities.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113054454_AddedNewEntities.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113054454_AddedNewEntities.Designer.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191115044632_AddedNewEntities.cs" />
-    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191115044632_AddedNewEntities.Designer.cs" />
     <Compile Remove="Migrations\20191115045259_AddedNewEntities.cs" />
     <Compile Remove="Migrations\20191115045259_AddedNewEntities.Designer.cs" />
     <Compile Remove="Migrations\20191115050215_AddedNewEntities.cs" />
@@ -35,6 +25,10 @@
     <Compile Remove="Migrations\20191115051238_AddedNewEntities.Designer.cs" />
     <Compile Remove="Migrations\20191115051541_AddedNewEntities.cs" />
     <Compile Remove="Migrations\20191115051541_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191116155830_AddPartnerToOrder.cs" />
+    <Compile Remove="Migrations\20191116155830_AddPartnerToOrder.Designer.cs" />
+    <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.cs" />
+    <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.Designer.cs" />
   </ItemGroup>
 
 
@@ -56,11 +50,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Data\Migrations\AppData\AppDataDB\" />
   </ItemGroup>
 
 </Project>
