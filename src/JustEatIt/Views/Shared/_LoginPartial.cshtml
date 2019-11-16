@@ -22,7 +22,9 @@
     }
     if (isAdmin || isCustomer)
     {
-        // Customer menu when available
+        <li class="nav-item">
+            <a  class="nav-link text-light" asp-controller="Order" asp-action="Orders" title="Orders">Orders</a>
+        </li>
     }
     <li class="nav-item">
         <a  class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>

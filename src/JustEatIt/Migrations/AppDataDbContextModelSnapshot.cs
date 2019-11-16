@@ -4,16 +4,14 @@ using JustEatIt.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace JustEatIt.Data.Migrations.AppData.AppDataDB
+namespace JustEatIt.Migrations
 {
     [DbContext(typeof(AppDataDbContext))]
-    [Migration("20191110235913_AddedNewEntities")]
-    partial class AddedNewEntities
+    partial class AppDataDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,10 +82,6 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -111,9 +105,9 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.DishAvailability", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("DiscountPrice")
@@ -136,7 +130,8 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishId");
+                    b.HasIndex("DishId")
+                        .IsUnique();
 
                     b.ToTable("DishesAvail");
                 });
@@ -160,9 +155,9 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.Order", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CustomerId")
@@ -180,27 +175,27 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
 
             modelBuilder.Entity("JustEatIt.Models.OrderItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("DishAvailId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("DishAvailabilityId")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishAvailId");
+                    b.HasIndex("DishAvailabilityId");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("JustEatIt.Models.Partner", b =>
@@ -260,8 +255,8 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
             modelBuilder.Entity("JustEatIt.Models.DishAvailability", b =>
                 {
                     b.HasOne("JustEatIt.Models.Dish", "Dish")
-                        .WithMany()
-                        .HasForeignKey("DishId")
+                        .WithOne("DishAvailability")
+                        .HasForeignKey("JustEatIt.Models.DishAvailability", "DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -277,11 +272,15 @@ namespace JustEatIt.Data.Migrations.AppData.AppDataDB
                 {
                     b.HasOne("JustEatIt.Models.DishAvailability", "DishAvail")
                         .WithMany()
-                        .HasForeignKey("DishAvailId");
+                        .HasForeignKey("DishAvailabilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("JustEatIt.Models.Order", null)
+                    b.HasOne("JustEatIt.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

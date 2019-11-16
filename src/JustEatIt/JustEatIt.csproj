@@ -13,8 +13,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191019030436_AppData_Initial.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191019030436_AppData_Initial.Designer.cs" />
     <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.cs" />
     <Compile Remove="Data\Migrations\AppData\AppDataDB\20191101213812_PartnerData.Designer.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191102033207_PartnerData.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191102033207_PartnerData.Designer.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191110235913_AddedNewEntities.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191110235913_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113053921_AddedNewEntities.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113053921_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113054454_AddedNewEntities.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191113054454_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191115044632_AddedNewEntities.cs" />
+    <Compile Remove="Data\Migrations\AppData\AppDataDB\20191115044632_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115045259_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115045259_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115050215_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115050215_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115051238_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115051238_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115051541_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115051541_AddedNewEntities.Designer.cs" />
   </ItemGroup>
 
 
@@ -29,11 +49,18 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\AppData\AppDataDB\" />
   </ItemGroup>
 
 </Project>

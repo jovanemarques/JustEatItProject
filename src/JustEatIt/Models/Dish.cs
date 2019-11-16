@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace JustEatIt.Models
 {
@@ -17,19 +15,23 @@ namespace JustEatIt.Models
         [Required]
         [StringLength(255)]
         public string Description { get; set; }
-        
-        [BindNever]
-        [Required]
-        public string Image { get; set; }
 
         [NotMapped]
         [Required]
         public IFormFile File { get; set; }
 
+        [ForeignKey("TypeId")]
+        public int TypeId { get; set; }
+
         [Required]
         public DishType Type { get; set; }
 
+        [ForeignKey("Partner")]
+        public string PartnerId { get; set; }
+
         [Required]
-        public Partner Partner { get; set; }
+        public virtual Partner Partner { get; set; }
+
+        public virtual  DishAvailability DishAvailability { get; set; }
     }
 }

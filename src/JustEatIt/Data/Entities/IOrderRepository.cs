@@ -1,15 +1,19 @@
-﻿using JustEatIt.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using JustEatIt.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace JustEatIt.Data.Entities
 {
-    interface IOrderRepository
+    public interface IOrderRepository
     {
         IQueryable<Order> GetAll { get; }
-        long Save(Order order);
+
+        int Create(Order order);
+
+        Order GetOrderById(int id);
+
         bool UpdateStatus(long orderId, int status);
+
+        IEnumerable<Order> GetOrdersForCustomer(string customerId);
     }
 }

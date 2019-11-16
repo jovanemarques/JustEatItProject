@@ -31,7 +31,6 @@ namespace JustEatIt.Data.Entities
                 {
                     dbDish.Name = dish.Name;
                     dbDish.Description = dish.Description;
-                    dbDish.Image = dish.Image;
                     dbDish.Type = dish.Type;
                 }
             }

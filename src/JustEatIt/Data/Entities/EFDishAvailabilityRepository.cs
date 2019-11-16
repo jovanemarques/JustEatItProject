@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using JustEatIt.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,28 +7,31 @@ namespace JustEatIt.Data.Entities
 {
     public class EFDishAvailabilityRepository : IDishAvailabilityRepository
     {
-        private AppDataDbContext context;
+        private readonly AppDataDbContext _context;
 
         public EFDishAvailabilityRepository(AppDataDbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        public IQueryable<DishAvailability> GetAll => context.DishesAvail.Include(d => d.Dish);
+        public IEnumerable<DishAvailability> GetAll()
+        {
+            return _context.DishesAvail.Include(d => d.Dish).ToList();
+        }
 
-        public long Save(DishAvailability dishAvail)
+        public int Save(DishAvailability dishAvail)
         {
             DishAvailability dbDishAvail;
 
             if (dishAvail.Id == 0)
             {
-                var newDish = context.DishesAvail.Add(dishAvail);
-                context.SaveChanges();
+                var newDish = _context.DishesAvail.Add(dishAvail);
+                _context.SaveChanges();
                 dbDishAvail = newDish.Entity;
             }
             else
             {
-                dbDishAvail = context.DishesAvail.FirstOrDefault(da => da.Id == dishAvail.Id);
+                dbDishAvail = _context.DishesAvail.FirstOrDefault(da => da.Id == dishAvail.Id);
                 if (dbDishAvail != null)
                 {
                     dbDishAvail.StartDate = dishAvail.StartDate;
@@ -41,18 +42,36 @@ namespace JustEatIt.Data.Entities
                 }
             }
 
-            context.SaveChanges();
+            _context.SaveChanges();
+
             return dbDishAvail.Id;
+        }
+
+        public void Update(DishAvailability dishAvailability)
+        {
+            var existingDishAvailability = _context.DishesAvail.FirstOrDefault(da => da.Id == dishAvailability.Id);
+            if (existingDishAvailability != null)
+            {
+                existingDishAvailability.StartDate = dishAvailability.StartDate;
+                existingDishAvailability.EndDate = dishAvailability.EndDate;
+                existingDishAvailability.OriginalPrice = dishAvailability.OriginalPrice;
+                existingDishAvailability.DiscountPrice = dishAvailability.DiscountPrice;
+                existingDishAvailability.Quantity = dishAvailability.Quantity;
+            }
+
+            _context.SaveChanges();
         }
 
         public DishAvailability Delete(int dishAvailId)
         {
-            DishAvailability dbDishAvail = context.DishesAvail.FirstOrDefault(da => da.Id == dishAvailId);
+            DishAvailability dbDishAvail = _context.DishesAvail.FirstOrDefault(da => da.Id == dishAvailId);
+
             if (dbDishAvail != null)
             {
-                context.DishesAvail.Remove(dbDishAvail);
-                context.SaveChanges();
+                _context.DishesAvail.Remove(dbDishAvail);
+                _context.SaveChanges();
             }
+
             return dbDishAvail;
         }
     }

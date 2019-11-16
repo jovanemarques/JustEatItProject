@@ -1,23 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JustEatIt.Models
 {
     public class Order
     {
         [BindNever]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [BindNever]
-        public ICollection<OrderItem> Items { get; set; }
+        public virtual ICollection<OrderItem> Items { get; set; }
 
         [Required]
         public int Status { get; set; }
 
-        public Customer Customer { get; set; }
+        [ForeignKey("Customer")]
+        public string CustomerId { get; set; }
+
+        public virtual Customer Customer { get; set; }
+
+        public decimal GetTotal()
+        {
+            decimal result = 0;
+            foreach (var orderItem in Items)
+            {
+                result += orderItem.DishAvail.DiscountPrice * orderItem.Quantity;
+            }
+
+            return result;
+        }
     }
 }
