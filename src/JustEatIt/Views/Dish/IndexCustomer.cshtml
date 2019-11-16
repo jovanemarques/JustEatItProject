@@ -1,38 +1,156 @@
 @{
     ViewData["Title"] = "Dishes";
 }
+    <script>
+        var map;
+        var markers = [];
+        var partnersOriginal = [];
+        var partners = [];
+        var iconFood = 'http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png';
 
-<h1>Choose your next great meal</h1>
+        /*async function getPartnerData() {
+            let result = await $.post("/Dish/GetDishesByLatLog", { ne: ['-123', '-321'], sw: ['123', '321'] }).promise();
+            partnersOriginal = JSON.parse(result);
+            *//*prom
+            .done(function (result) {
+                partnersOriginal = JSON.parse(result);
+            })
+            .fail(function (err) {
+                alert('error: ' + err);
+            });*//*
+        }*/
 
-Location:<input type="text" /><input type="button" value="Map" /><input type="button" value="List" />
+        //get all partner and its dishes for the bounderies to use on the dinamic search
+        //await getPartnerData();
 
-<div id="map" style="height:600px"></div>
-<script>
-    var map;
-    var toronto = { lat: 43.6532, lng: -79.3832 };
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: toronto,
-            zoom: 10
-        });
-        var iconFood = '~/images/map/pin-map-location-19-50.png';
-        var contentString = '<div id="content">' +
-            '<div id="siteNotice">' +
-            '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">Partner</h1>' +
-            '<div id="bodyContent">' +
-            '<p><b>Partner</b> and the details of the Partner.</p>' +
-            '</div>' +
-            '</div>';
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-        //custom icon not working with local images
-        //var marker = new google.maps.Marker({ position: toronto, icon: iconFood, map: map });
-        var marker = new google.maps.Marker({ position: toronto, map: map });
-        marker.addListener('click', function () {
-            infowindow.open(map, marker);
-        });
-    }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEWhmZWq1kyojM46KzO-yZOYsw4jdkP6w&callback=initMap" async defer></script>
+        function loadData() {
+            $.post( "/Dish/GetDishesByLatLog", {ne:['-123', '-321'], sw:['123', '321']}, function( result ) {
+                partnersOriginal = JSON.parse(result);
+                $('#divSpinner').css('display', 'none');
+                $('#divSearch').css('display', 'block');
+                partners = partnersOriginal.slice(0);
+                drawMarkers();
+            })
+            .fail(function() {
+              alert('error');
+            });
+        }
+
+
+
+        /*partnersOriginal = [
+                {
+                    name:'Pizza Pizza',
+                    location: { lat: 43.6532, lng: -79.3832 },
+                    dishes: ['Deluxe Pizza', 'Pepperoni Pizza'],
+                },
+                {
+                    name:'Dominos Pizza',
+                    location: { lat: 43.7532, lng: -79.4832 },
+                    dishes: ['Cheese Pizza', 'Pepperoni Pizza'],
+                }
+        ];*/
+
+        function drawMarkers() {
+            if (partners) {
+                partners.forEach(p => {
+                    // decide how to show the partner and dishes info
+                    // insert a link to redirect to the parner page?
+                    let contentString = '<div id="content">' +
+                        '<div id="siteNotice">' +
+                        '</div>' +
+                        '<h2 id="firstHeading" class="firstHeading">' + p.name + '</h2>' +
+                        '<div id="bodyContent">';
+                    p.dishes.forEach(d => {
+                        contentString += '<p>' + d + '</p>';
+                    });
+                    contentString += '</div>' +
+                        '</div>';
+                    let infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+                    let marker = new google.maps.Marker({ position: p.location, icon: iconFood, map: map });
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                    });
+                    markers.push(marker);
+                    map.addListener('mousemove', function () {
+                        infowindow.close();
+                    });
+                });
+            }
+            //var marker = new google.maps.Marker({ position: toronto, map: map });
+        }
+
+        function refreshMap() {
+            let counter = markers.length;
+            for (let i = 0; i < counter; i++) {
+                let mark = markers.pop(i);
+                mark.setMap(null);
+                mark = null;
+            }
+            drawMarkers();
+        }
+        function search(e) {
+            if (e.value == "") {
+                partners = partnersOriginal.slice(0);
+                refreshMap();
+            }
+            else if (e.value && e.value.length > 2) {
+                partners = [];
+                partnersOriginal.forEach(p => {
+                    let dishes = [];
+                    p.dishes.forEach(d => {
+                        if (d.toLowerCase().indexOf(e.value.toLowerCase()) > -1) {
+                            dishes.push(d);
+                        }
+                    });
+                    if (dishes.length > 0) {
+                        let newP = JSON.parse(JSON.stringify(p));
+                        newP.dishes = dishes;
+                        partners.push(newP);
+                    }
+                });
+                refreshMap();
+            }
+        }
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Choose your next great meal</h1>
+                <div class="spinner-border text-success" role="status" id="divSpinner">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="form-group" id="divSearch" style="display:none;">
+                    <label for="search">Choose what you want to eat</label>
+                    <input type="text" class="form-control" id="search" placeholder="Write a dish name" onkeyup="search(this);">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radMapList" id="radMapList1" value="option1" checked>
+                    <label class="form-check-label" for="radMapList1">
+                        Map
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="radMapList" id="radMapList2" value="option2">
+                    <label class="form-check-label" for="radMapList2">
+                        List
+                    </label>
+                </div>
+                <div id="map" style="height:600px"></div>
+            </div>
+        </div>
+    </div>
+        <script>
+            function initMap() {
+                var toronto = { lat: 43.6532, lng: -79.3832 };
+                map = new google.maps.Map(document.getElementById('map'),
+                {
+                    center: toronto,
+                    zoom: 10
+                });
+                loadData();
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEWhmZWq1kyojM46KzO-yZOYsw4jdkP6w&callback=initMap" async defer></script>

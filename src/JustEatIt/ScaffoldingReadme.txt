@@ -21,5 +21,4 @@ The generated UI requires MVC. To add MVC to your app:
 
 Apps that use ASP.NET Core Identity should also use HTTPS. To enable HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
 
-dotnet user-secrets set SendGridUser JustEatItUser
-dotnet user-secrets set SendGridKey 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
+    //"DefaultConnection": "Server=justeatit-db.csab0ctvripw.us-east-1.rds.amazonaws.com;Database=justeatit-db;User Id=sqladmin;Password=$t5mUQqx428U&V*VMXd"

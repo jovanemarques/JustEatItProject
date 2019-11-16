@@ -1,0 +1,28 @@
+﻿@model AdminViewModel
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Page Under Construction</h1>
+
+<form asp-controller="Admin">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Email">User e-mail:</label>
+        <input asp-for="Email" class="form-control">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Role">User Role:</label>
+        <select asp-for="Role" type="text" class="form-control">
+            <option value="" selected>Choose an option</option>
+            <option value="Administrator">Administrator</option>
+            <option value="Partner">Partner</option>
+            <option value="Customer">Customer</option>
+        </select>
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success" asp-action="AddRole">Add Role</button>
+    <button type="submit" class="btn btn-success" asp-action="RemoveRole">Remove Role</button>
+</form>

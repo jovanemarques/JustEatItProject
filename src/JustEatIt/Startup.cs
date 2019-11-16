@@ -26,20 +26,23 @@ namespace JustEatIt
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddDbContext<AppDataDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
             services.AddTransient<IDishRepository, EFDishRepository>();
             services.AddTransient<IPartnerRepository, EFPartnerRepository>();
 
-            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(opts => opts.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IOrderRepository, EFOrderRepository>();
+            services.AddTransient<IDishAvailabilityRepository, EFDishAvailabilityRepository>();
+            services.AddTransient<IItemOrderRepository, EFItemOrderRepository>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             // Verify which keys is available and add authentication for them
@@ -77,7 +80,7 @@ namespace JustEatIt
             }
 
             services.AddMvc();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
 
@@ -110,6 +113,8 @@ namespace JustEatIt
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            SeedDataIdentity.EnsurePopulated(app).Wait();
         }
     }
 }

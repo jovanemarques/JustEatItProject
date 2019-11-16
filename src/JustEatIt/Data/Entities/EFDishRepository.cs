@@ -12,28 +12,27 @@ namespace JustEatIt.Data.Entities
             this.context = context;
         }
 
-        public IQueryable<Dish> GetAll => context.Dish;
+        public IQueryable<Dish> GetAll => context.Dishes;
 
         public int Save(Dish dish)
         {
+            Dish dbDish;
+
             if (dish.Id == 0)
             {
-                var newDish = context.Dish.Add(dish);
+                var newDish = context.Dishes.Add(dish);
                 context.SaveChanges();
-                dish = newDish.Entity;
+                dbDish = newDish.Entity;
             }
-
-            Dish dbDish = context.Dish.FirstOrDefault(r => r.Id == dish.Id);
-            if (dbDish != null)
+            else
             {
-                dbDish.Name = dish.Name;
-                dbDish.Description = dish.Description;
-                dbDish.Price = dish.Price;
-                dbDish.Quantity = dish.Quantity;
-                dbDish.BestBefore = dish.BestBefore;
-                dbDish.Image = dish.Image;
-                dbDish.Type = dish.Type;
-                dbDish.Restaurant = dish.Restaurant;
+                dbDish = context.Dishes.FirstOrDefault(r => r.Id == dish.Id);
+                if (dbDish != null)
+                {
+                    dbDish.Name = dish.Name;
+                    dbDish.Description = dish.Description;
+                    dbDish.Type = dish.Type;
+                }
             }
 
             context.SaveChanges();
@@ -42,10 +41,10 @@ namespace JustEatIt.Data.Entities
 
         public Dish Delete(int id)
         {
-            Dish dbDish = context.Dish.FirstOrDefault(r => r.Id == id);
+            Dish dbDish = context.Dishes.FirstOrDefault(r => r.Id == id);
             if (dbDish != null)
             {
-                context.Dish.Remove(dbDish);
+                context.Dishes.Remove(dbDish);
                 context.SaveChanges();
             }
             return dbDish;

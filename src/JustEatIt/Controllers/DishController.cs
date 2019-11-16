@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using JustEatIt.Data.Entities;
@@ -9,10 +10,11 @@ namespace JustEatIt.Controllers
 {
     public class DishController : Controller
     {
-        IDishRepository dishRepo;
+        private readonly IDishRepository _dishRepo;
+
         public DishController(IDishRepository dishRepository)
         {
-            dishRepo = dishRepository;
+            _dishRepo = dishRepository;
         }
 
         public ActionResult Index()
@@ -25,15 +27,35 @@ namespace JustEatIt.Controllers
         public ActionResult IndexPartner()
         {
             // check user and redirect to right page
-            return View(dishRepo.GetAll);
+            return View(_dishRepo.GetAll);
         }
 
         public ActionResult IndexCustomer()
         {
             // check user and redirect to right page
-            return View(dishRepo.GetAll);
+            return View(_dishRepo.GetAll);
         }
 
+        [HttpPost]
+        public String GetDishesByLatLog(String[] ne, String[] sw)
+        {
+            //return dishes based in the location given
+            String json = "";
+            json += "[";
+            json += "   {";
+            json += "       \"name\":\"Pizza Pizza\",";
+            json += "       \"location\": { \"lat\": 43.6532, \"lng\": -79.3832 },";
+            json += "       \"dishes\": [\"Deluxe Pizza\", \"Pepperoni Pizza\"]";
+            json += "   },";
+            json += "   {";
+            json += "       \"name\":\"Dominos Pizza\",";
+            json += "       \"location\": { \"lat\": 43.7532, \"lng\": -79.4832 },";
+            json += "       \"dishes\": [\"Cheese Pizza\", \"Pepperoni Pizza\"]";
+            json += "   }";
+            json += "]";
+
+            return json;
+        }
         public ActionResult Details(int id)
         {
             return View();
@@ -48,7 +70,7 @@ namespace JustEatIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([FromForm]Dish dish)
         {
-            var createdDishId = dishRepo.Save(dish);
+            var createdDishId = _dishRepo.Save(dish);
 
             if (dish.File != null)
             {
@@ -74,13 +96,13 @@ namespace JustEatIt.Controllers
                 }
             }
 
-            dishRepo.Save(dish);
+            _dishRepo.Save(dish);
             return RedirectToAction(nameof(Index));
         }
 
         public ActionResult Edit(int dishId)
         {
-            IQueryable<Dish> dishes = dishRepo.GetAll;
+            IQueryable<Dish> dishes = _dishRepo.GetAll;
             var myDished = dishes.ToList().Where(d => d.Id == dishId);
 
             return View("Create", dishes.First());
@@ -90,7 +112,7 @@ namespace JustEatIt.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int dishId)
         {
-            Dish dish = dishRepo.Delete(dishId);
+            Dish dish = _dishRepo.Delete(dishId);
             await S3ImageService.RemoveFileFromS3(dishId);
 
             return RedirectToAction(nameof(Index), dish);
