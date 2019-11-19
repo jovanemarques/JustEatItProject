@@ -5,16 +5,19 @@ using JustEatIt.Data.Entities;
 using JustEatIt.Models;
 using JustEatIt.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JustEatIt.Controllers
 {
     public class DishController : Controller
     {
         private readonly IDishRepository _dishRepo;
+        private readonly IPartnerRepository _partnerRepo;
 
-        public DishController(IDishRepository dishRepository)
+        public DishController(IDishRepository dishRepository, IPartnerRepository partnerRepository)
         {
             _dishRepo = dishRepository;
+            _partnerRepo = partnerRepository;
         }
 
         public ActionResult Index()
@@ -39,20 +42,39 @@ namespace JustEatIt.Controllers
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
-            //return dishes based in the location given
+            decimal ne_lat = Decimal.Parse(ne[0]);
+            decimal ne_lng = Decimal.Parse(ne[1]);
+            decimal sw_lat = Decimal.Parse(sw[0]);
+            decimal sw_lng = Decimal.Parse(sw[1]);
+
+            var partners = _partnerRepo.GetAll
+            .Where(partner =>
+                partner.Latitude >= sw_lat && partner.Longitude >= sw_lng &&
+                partner.Latitude <= ne_lat && partner.Longitude <= ne_lng
+            ).Include("Dishes").ToList();
+
             String json = "";
             json += "[";
-            json += "   {";
-            json += "       \"name\":\"Pizza Pizza\",";
-            json += "       \"location\": { \"lat\": 43.6532, \"lng\": -79.3832 },";
-            json += "       \"dishes\": [\"Deluxe Pizza\", \"Pepperoni Pizza\"]";
-            json += "   },";
-            json += "   {";
-            json += "       \"name\":\"Dominos Pizza\",";
-            json += "       \"location\": { \"lat\": 43.7532, \"lng\": -79.4832 },";
-            json += "       \"dishes\": [\"Cheese Pizza\", \"Pepperoni Pizza\"]";
-            json += "   }";
-            json += "]";
+            var firstPartner = true;
+            foreach (var partner in partners)
+            {
+                json += firstPartner ? "" : ",";
+                json += "   {";
+                json += "       \"name\":\"" + partner.Name + "\",";
+                json += "       \"location\": { \"lat\": " + partner.Latitude + ", \"lng\": " + partner.Longitude + " },";
+                json += "       \"dishes\": [";
+                var firstDish = true;
+                foreach (var dish in partner.Dishes)
+                {
+                    json += firstDish ? "" : ",";
+                    json += "           \"" + dish.Name + "\"";
+                    firstDish = false;
+                }
+                json += "       ]";
+                json += "   }";
+                firstPartner = false;
+            }
+            json += "       ]";
 
             return json;
         }

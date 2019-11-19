@@ -29,9 +29,6 @@ namespace JustEatIt.Models
         [ForeignKey("Partner")]
         public string PartnerId { get; set; }
 
-        [Required]
-        public virtual Partner Partner { get; set; }
-
         public virtual  DishAvailability DishAvailability { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JustEatIt.Models
@@ -39,5 +40,7 @@ namespace JustEatIt.Models
         [Range(-90, 90)]
         [Column(TypeName = "decimal(8, 6)")]
         public decimal Latitude { get; set; }
+
+        public virtual ICollection<Dish> Dishes { get; set; }
     }
 }
