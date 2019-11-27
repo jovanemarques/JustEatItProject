@@ -36,6 +36,7 @@ namespace JustEatIt.Data.Entities
                     dbDishAvail.OriginalPrice = dishAvail.OriginalPrice;
                     dbDishAvail.DiscountPrice = dishAvail.DiscountPrice;
                     dbDishAvail.Quantity = dishAvail.Quantity;
+                    dbDishAvail.QuantityTotal = dishAvail.QuantityTotal;
                 }
             }
 

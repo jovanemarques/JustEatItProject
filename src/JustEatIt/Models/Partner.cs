@@ -30,14 +30,16 @@ namespace JustEatIt.Models
         [Display(Name = "Postal code")]
         public string PostalCode { get; set; }
 
-        [Required]
         [Range(-180, +180)]
         [Column(TypeName = "decimal(9, 6)")]
+        [DisplayFormat(DataFormatString = "{0:0.000000}", ApplyFormatInEditMode = true, NullDisplayText = "")]
+        [Required]
         public decimal Longitude { get; set; }
 
-        [Required]
         [Range(-90, 90)]
         [Column(TypeName = "decimal(8, 6)")]
+        [DisplayFormat(DataFormatString = "{0:0.000000}", ApplyFormatInEditMode = true, NullDisplayText = "")]
+        [Required]
         public decimal Latitude { get; set; }
     }
 }

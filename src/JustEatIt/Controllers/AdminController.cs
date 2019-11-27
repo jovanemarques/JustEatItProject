@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JustEatIt.Models;
 using JustEatIt.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +13,9 @@ namespace JustEatIt.Controllers
     [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
-        public UserManager<IdentityUser> UserManager { get; set; }
+        public UserManager<CustomUser> UserManager { get; set; }
 
-        public AdminController(UserManager<IdentityUser> userManager)
+        public AdminController(UserManager<CustomUser> userManager)
         {
             UserManager = userManager;
         }
@@ -27,7 +28,7 @@ namespace JustEatIt.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = await UserManager.FindByNameAsync(model.Email);
+                CustomUser user = await UserManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
                     if (!await UserManager.IsInRoleAsync(user, model.Role))
@@ -59,7 +60,7 @@ namespace JustEatIt.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser user = await UserManager.FindByNameAsync(model.Email);
+                CustomUser user = await UserManager.FindByNameAsync(model.Email);
                 if (user != null)
                 {
                     if (await UserManager.IsInRoleAsync(user, model.Role))

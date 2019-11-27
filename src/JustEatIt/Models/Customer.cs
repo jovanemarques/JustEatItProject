@@ -6,6 +6,7 @@ namespace JustEatIt.Models
     {
         public string Id { get; set; }
 
+        [Required]
         [StringLength(50)]
         [Display(Name = "First name")]
         public string FirstName { get; set; }

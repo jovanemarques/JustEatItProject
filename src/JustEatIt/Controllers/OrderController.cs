@@ -16,11 +16,11 @@ namespace JustEatIt.Controllers
         private readonly IOrderRepository _orderRepository;
         private readonly IDishRepository _dishRepository;
         private readonly IDishAvailabilityRepository _dishAvailabilityRepository;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<CustomUser> _userManager;
 
         public OrderController(
             IOrderRepository orderRepository,
-            UserManager<IdentityUser> userManager,
+            UserManager<CustomUser> userManager,
             IDishRepository dishRepository,
             IDishAvailabilityRepository dishAvailabilityRepository)
         {

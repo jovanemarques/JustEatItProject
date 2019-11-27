@@ -1,32 +1,50 @@
 @model Dish
 @{
-    ViewData["Title"] = "Add New Dish";
+    ViewData["Title"] = ((Model == null) || (Model.Id == 0)) ? "Add New Dish" : "Edit Dish";
 }
 
-<h1>Add New Dish</h1>
+<h1>@ViewData["Title"]</h1>
 
-<form asp-controller="Dish" asp-action="Create" enctype="multipart/form-data">
-    @Html.HiddenFor(x => x.Id)
-    <div class="form-group">
-        <label asp-for="Name">Name</label>
-        <input type="text" class="form-control" asp-for="Name">
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Dish" asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(x => x.Id)
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input type="text" class="form-control" asp-for="Name">
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <input type="text" class="form-control" asp-for="Description">
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.TypeList, "Id", "Name"))"></select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File">Image</label>
+                <input type="file" class="form-control-file" asp-for="File">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input type="text" class="form-control" asp-for="Description">
-    </div>
-    <div class="form-group">
-        <label asp-for="Type">Type</label>
-        <select class="form-control" asp-for="Type">
-            <option>Pizza</option>
-            <option>Sushi</option>
-            <option>Salad</option>
-            <option>Pasta</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="File">Image</label>
-        <input type="file" class="form-control-file"asp-for="File">
-    </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-</form>
+</div>
+<div>
+    <a asp-action="IndexPartner">Back to List</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <link href="~/lib/jquery-customselect/css/jquery-customselect-1.9.1.css" rel="stylesheet" />
+    <script src="~/lib/jquery-customselect/js/jquery-customselect-1.9.1.js"></script>
+
+    <script>
+        $(function () {
+            $("#TypeId").customselect();
+        });
+    </script>
+}

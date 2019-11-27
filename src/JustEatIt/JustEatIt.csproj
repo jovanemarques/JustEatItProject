@@ -29,6 +29,18 @@
     <Compile Remove="Migrations\20191116155830_AddPartnerToOrder.Designer.cs" />
     <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.cs" />
     <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.Designer.cs" />
+    <Compile Remove="Migrations\20191116160344_AddPartnerToOrder.cs" />
+    <Compile Remove="Migrations\20191116160344_AddPartnerToOrder.Designer.cs" />
+    <Compile Remove="Migrations\20191124044937_R2_I2_Updates.cs" />
+    <Compile Remove="Migrations\20191124044937_R2_I2_Updates.Designer.cs" />
+    <Compile Remove="Migrations\20191124045339_R2_I2_Updates.cs" />
+    <Compile Remove="Migrations\20191124045339_R2_I2_Updates.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Data\Migrations\AppData\20191124063232_Initial.cs" />
+    <Compile Include="Data\Migrations\AppData\20191124063232_Initial.Designer.cs" />
+    <Compile Include="Data\Migrations\AppData\AppDataDbContextModelSnapshot.cs" />
   </ItemGroup>
 
 
@@ -50,6 +62,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\jquery-customselect\" />
   </ItemGroup>
 
 </Project>

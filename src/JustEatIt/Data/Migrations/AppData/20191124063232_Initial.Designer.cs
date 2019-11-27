@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace JustEatIt.Migrations
+namespace JustEatIt.Data.Migrations.AppData
 {
     [DbContext(typeof(AppDataDbContext))]
-    [Migration("20191115052534_AddedNewEntities")]
-    partial class AddedNewEntities
+    [Migration("20191124063232_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,13 +127,15 @@ namespace JustEatIt.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("QuantityTotal")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishId")
-                        .IsUnique();
+                    b.HasIndex("DishId");
 
                     b.ToTable("DishesAvail");
                 });
@@ -165,12 +167,17 @@ namespace JustEatIt.Migrations
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PartnerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("Orders");
                 });
@@ -257,8 +264,8 @@ namespace JustEatIt.Migrations
             modelBuilder.Entity("JustEatIt.Models.DishAvailability", b =>
                 {
                     b.HasOne("JustEatIt.Models.Dish", "Dish")
-                        .WithOne("DishAvailability")
-                        .HasForeignKey("JustEatIt.Models.DishAvailability", "DishId")
+                        .WithMany("DishAvailabilities")
+                        .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -268,6 +275,10 @@ namespace JustEatIt.Migrations
                     b.HasOne("JustEatIt.Models.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId");
+
+                    b.HasOne("JustEatIt.Models.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
                 });
 
             modelBuilder.Entity("JustEatIt.Models.OrderItem", b =>
