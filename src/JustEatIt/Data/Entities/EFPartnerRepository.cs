@@ -51,5 +51,17 @@ namespace JustEatIt.Data.Entities
             }
             return dbPartner;
         }
+/*
+        public IQueryable<DishAvailability> GetDishAvailabilitiesByPartnerId(string partnerId)
+        {
+            IQueryable < Partner > partners = context.Partners;
+            Partner partner = partners.Where(p => p.Id.Equals(partnerId));
+            IList < DishAvailability > dishesAv = new List<DishAvailability>();
+            foreach (var dish in partner.Dishes)
+            {
+                dishesAv.Add(dish.DishAvailabilities);
+            }
+            return null;
+        }*/
     }
 }

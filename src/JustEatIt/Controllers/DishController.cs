@@ -17,15 +17,17 @@ namespace JustEatIt.Controllers
         private readonly IDishRepository _dishRepo;
         private readonly IDishTypeRepository _typeRepo;
         private readonly IDishAvailabilityRepository _availRepo;
+        private readonly IPartnerRepository _partnerRepo;
         private readonly UserManager<CustomUser> _userManager;
 
         public DishController(IDishRepository dishRepository, IDishTypeRepository typeRepository, 
-            IDishAvailabilityRepository availabilityRepository, UserManager<CustomUser> userManager)
+            IDishAvailabilityRepository availabilityRepository, UserManager<CustomUser> userManager, IPartnerRepository partnerRepository)
         {
             _dishRepo = dishRepository;
             _typeRepo = typeRepository;
             _availRepo = availabilityRepository;
             _userManager = userManager;
+            _partnerRepo = partnerRepository;
         }
 
         public ActionResult Index()
@@ -48,23 +50,49 @@ namespace JustEatIt.Controllers
             return View(_dishRepo.GetAll);
         }
 
+        public ActionResult IndexCustomerList()
+        {
+            // check user and redirect to right page
+            return View(_dishRepo.GetAll);
+        }
+
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
-            //return dishes based in the location given
+            decimal ne_lat = Decimal.Parse(ne[0]);
+            decimal ne_lng = Decimal.Parse(ne[1]);
+            decimal sw_lat = Decimal.Parse(sw[0]);
+            decimal sw_lng = Decimal.Parse(sw[1]);
+
+            var partners = _partnerRepo.GetAll
+            .Where(partner =>
+                partner.Latitude >= sw_lat && partner.Longitude >= sw_lng &&
+                partner.Latitude <= ne_lat && partner.Longitude <= ne_lng
+            ).Include("Dishes").ToList();
+
+            // this could be a ViewModel also
             String json = "";
             json += "[";
-            json += "   {";
-            json += "       \"name\":\"Pizza Pizza\",";
-            json += "       \"location\": { \"lat\": 43.6532, \"lng\": -79.3832 },";
-            json += "       \"dishes\": [\"Deluxe Pizza\", \"Pepperoni Pizza\"]";
-            json += "   },";
-            json += "   {";
-            json += "       \"name\":\"Dominos Pizza\",";
-            json += "       \"location\": { \"lat\": 43.7532, \"lng\": -79.4832 },";
-            json += "       \"dishes\": [\"Cheese Pizza\", \"Pepperoni Pizza\"]";
-            json += "   }";
-            json += "]";
+            var firstPartner = true;
+            foreach (var partner in partners)
+            {
+                json += firstPartner ? "" : ",";
+                json += "   {";
+                json += "       \"name\":\"" + partner.Name + "\",";
+                json += "       \"location\": { \"lat\": " + partner.Latitude + ", \"lng\": " + partner.Longitude + " },";
+                json += "       \"dishes\": [";
+                var firstDish = true;
+                foreach (var dish in partner.Dishes)
+                {
+                    json += firstDish ? "" : ",";
+                    json += "           \"" + dish.Name + "\"";
+                    firstDish = false;
+                }
+                json += "       ]";
+                json += "   }";
+                firstPartner = false;
+            }
+            json += "       ]";
 
             return json;
         }
