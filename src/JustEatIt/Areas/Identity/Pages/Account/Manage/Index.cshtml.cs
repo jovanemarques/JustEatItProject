@@ -105,7 +105,7 @@ namespace JustEatIt.Areas.Identity.Pages.Account.Manage
             if ((Input.PhoneNumber != user.PhoneNumber) || (Customer.FirstName != user.Name))
             {
                 user.PhoneNumber = Input.PhoneNumber;
-                user.Name = Customer.FirstName;
+                user.Name = Customer.FullName;
 
                 var setResult = await _userManager.UpdateAsync(user);
                 if (!setResult.Succeeded)

@@ -46,16 +46,16 @@ namespace JustEatIt.Data
                 }
 
                 // If not find the admin user, create it
-                CustomUser admUser = await userManager.FindByNameAsync("csjusteatit@gmail.com");
+                CustomUser admUser = await userManager.FindByNameAsync("justeatit.cs@gmail.com");
                 if (admUser == null)
                 {
                     admUser = new CustomUser {
-                        UserName = "csjusteatit@gmail.com",
-                        Email = "csjusteatit@gmail.com",
+                        UserName = "justeatit.cs@gmail.com",
+                        Email = "justeatit.cs@gmail.com",
                         EmailConfirmed = true
                     };
                     await userManager.CreateAsync(admUser, "justEatIt5$");
-                    admUser = await userManager.FindByNameAsync("csjusteatit@gmail.com");
+                    admUser = await userManager.FindByNameAsync("justeatit.cs@gmail.com");
 
                     // Add the roles to admin
                     await userManager.AddToRoleAsync(admUser, "Administrator");

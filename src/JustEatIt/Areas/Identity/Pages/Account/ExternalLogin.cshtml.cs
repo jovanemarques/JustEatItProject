@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using JustEatIt.Data.Entities;
 using JustEatIt.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,17 +25,20 @@ namespace JustEatIt.Areas.Identity.Pages.Account
         private readonly UserManager<CustomUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly ICustomerRepository _repoCustomer;
 
         public ExternalLoginModel(
             SignInManager<CustomUser> signInManager,
             UserManager<CustomUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICustomerRepository customerRepository)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _emailSender = emailSender;
+            _repoCustomer = customerRepository;
         }
 
         [BindProperty]
@@ -43,6 +47,9 @@ namespace JustEatIt.Areas.Identity.Pages.Account
         public string LoginProvider { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        [BindProperty]
+        public Customer Customer { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
@@ -103,6 +110,13 @@ namespace JustEatIt.Areas.Identity.Pages.Account
                     Input = new InputModel
                     {
                         Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                    };                    
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    Customer = new Customer
+                    {
+                        FirstName = info.Principal.FindFirstValue(ClaimTypes.Name)
                     };
                 }
                 return Page();
@@ -122,16 +136,31 @@ namespace JustEatIt.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = new CustomUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true };
+                var name = Customer.FirstName;
+                if ((Customer.LastName != null) && (Customer.LastName.Trim().Length > 0))
+                {
+                    name += $" {Customer.LastName.Trim()}";
+                }
+
+                var user = new CustomUser { UserName = Input.Email, Email = Input.Email, EmailConfirmed = true, Name = name };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Customer");
-                    result = await _userManager.AddLoginAsync(user, info);
-                    if (result.Succeeded)
+                    // Insert the user into internal customer database
+                    Customer.Id = user.Id;
+                    if (_repoCustomer.Save(Customer) == "")
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError("", "Unable to login with this provider.");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Customer");
+                        result = await _userManager.AddLoginAsync(user, info);
+                        if (result.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
