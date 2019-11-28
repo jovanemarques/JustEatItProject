@@ -1,34 +1,23 @@
-﻿@model Dish
+@model Dish
 @{
     ViewData["Title"] = "Add New Dish";
 }
 
 <h1>Add New Dish</h1>
 
-<form asp-controller="Dish" asp-action="Create">
+<form asp-controller="Dish" asp-action="Create" enctype="multipart/form-data">
+    @Html.HiddenFor(x => x.Id)
     <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" name="name">
+        <label asp-for="Name">Name</label>
+        <input type="text" class="form-control" asp-for="Name">
     </div>
     <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" name="description">
+        <label asp-for="Description">Description</label>
+        <input type="text" class="form-control" asp-for="Description">
     </div>
     <div class="form-group">
-        <label for="price">Price</label>
-        <input type="text" class="form-control" id="price" name="price">
-    </div>
-    <div class="form-group">
-        <label for="quantity">Quantity</label>
-        <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="10">
-    </div>
-    <div class="form-group">
-        <label for="bestBefore">BestBefore</label>
-        <input type="date" class="form-control" id="bestBefore" name="bestBefore">
-    </div>
-    <div class="form-group">
-        <label for="type">Type</label>
-        <select class="form-control" id="type" name="type">
+        <label asp-for="Type">Type</label>
+        <select class="form-control" asp-for="Type">
             <option>Pizza</option>
             <option>Sushi</option>
             <option>Salad</option>
@@ -36,18 +25,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="restaurant">Restaurant</label>
-        <select class="form-control" id="restaurant" name="restaurant">
-            <option>Italian</option>
-            <option>Brazillian</option>
-            <option>Ukranian</option>
-            <option>Indian</option>
-            <option>Franch</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" class="form-control-file" id="image" name="image">
+        <label asp-for="File">Image</label>
+        <input type="file" class="form-control-file"asp-for="File">
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
 </form>

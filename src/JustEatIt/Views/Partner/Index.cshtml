@@ -1,0 +1,78 @@
+﻿@model PartnerDashboardViewModel
+
+@{
+    ViewData["Title"] = "Partner Dashboard";
+}
+
+<h1 class="text-center">Dashboard for @Model.Date.ToString("MMM dd, yyyy")</h1>
+<hr />
+<h3 class="text-center">Dish availability</h3>
+<div class="row">
+    <div class="col-md-6">
+        <div id="ordersChart" class="disp-chart"></div>
+        <h3 class="my-lg-3">Dishes on menu: @Model.DishesMenu</h3>
+        <h3 class="my-lg-3">Pending orders: @Model.PendingOrders</h3>
+        <h3 class="my-lg-3">Finished orders: @Model.OrdersFinished</h3>
+    </div>
+    <div class="col-md-6">
+        <a class="my-lg-1 btn btn-success w-100 mt-2" asp-controller="Dish" asp-action="IndexPartner">Dish list</a>
+        <a class="my-lg-1 btn btn-success w-100" asp-controller="Dish" asp-action="IndexPartner">Dish availability</a>
+        <br/>
+        <h4>Pending Orders List</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Customer Name
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.OpenedOrders)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.Customer.FirstName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Complete", "ChangeOrderStatus", new { id = order.Id, status = 2 })
+                            @Html.ActionLink("Cancel", "ChangeOrderStatus", new { id = order.Id, status = 3 })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Dishes', 'Availability'],
+          ['Available', @Model.DishesAvailable],
+          ['Sold', @Model.DishesSold]
+        ]);
+
+        var options = {
+            pieHole: 0.4,
+            legend: 'none'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('ordersChart'));
+        chart.draw(data, options);
+      }
+    </script>
+}

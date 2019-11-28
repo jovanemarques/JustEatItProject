@@ -5,8 +5,36 @@
     <UserSecretsId>aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\AppData\**" />
+    <Compile Remove="wwwroot\images\map\**" />
+    <Content Remove="Data\Migrations\AppData\**" />
+    <Content Remove="wwwroot\images\map\**" />
+    <EmbeddedResource Remove="Data\Migrations\AppData\**" />
+    <EmbeddedResource Remove="wwwroot\images\map\**" />
+    <None Remove="Data\Migrations\AppData\**" />
+    <None Remove="wwwroot\images\map\**" />
+  </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20191115045259_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115045259_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115050215_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115050215_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115051238_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115051238_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191115051541_AddedNewEntities.cs" />
+    <Compile Remove="Migrations\20191115051541_AddedNewEntities.Designer.cs" />
+    <Compile Remove="Migrations\20191116155830_AddPartnerToOrder.cs" />
+    <Compile Remove="Migrations\20191116155830_AddPartnerToOrder.Designer.cs" />
+    <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.cs" />
+    <Compile Remove="Migrations\20191116160027_AddPartnerToOrder.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.106" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.0.0" />
@@ -15,10 +43,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Sendgrid" Version="9.12.0" />
   </ItemGroup>
 
 </Project>

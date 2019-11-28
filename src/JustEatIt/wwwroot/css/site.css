@@ -161,3 +161,7 @@ img, embed, video, object {
     color: white;
 }
 
+.disp-chart {
+    height: 40vh!important;
+}
+

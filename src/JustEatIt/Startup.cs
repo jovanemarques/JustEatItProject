@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using JustEatIt.Data;
+using JustEatIt.Data.Entities;
+using JustEatIt.Infrastructure.Email_Verification;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using JustEatIt.Models;
-using JustEatIt.Data.Entities;
 
 namespace JustEatIt
 {
@@ -29,21 +25,28 @@ namespace JustEatIt
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IDishRepository, EFDishRepository>();
-            services.AddMvc();
             services.AddDbContext<ApplicationDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddDbContext<AppDataDbContext>(opts =>
-                //opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
-            services.AddDefaultIdentity<IdentityUser>(opts => opts.SignIn.RequireConfirmedAccount = false)
+            services.AddTransient<IDishRepository, EFDishRepository>();
+            services.AddTransient<IPartnerRepository, EFPartnerRepository>();
+
+            services.AddIdentity<IdentityUser, IdentityRole>(opts => opts.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IOrderRepository, EFOrderRepository>();
+            services.AddTransient<IDishAvailabilityRepository, EFDishAvailabilityRepository>();
+            services.AddTransient<IItemOrderRepository, EFItemOrderRepository>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             // Verify which keys is available and add authentication for them
-            if ((Configuration["Authentication:Facebook:AppId"] != null) && (Configuration["Authentication:Facebook:AppSecret"] != null))
+            if (Configuration["Authentication:Facebook:AppId"] != null && Configuration["Authentication:Facebook:AppSecret"] != null)
             {
                 services.AddAuthentication().AddFacebook(opt =>
                 {
@@ -51,7 +54,7 @@ namespace JustEatIt
                     opt.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
                 });
             }
-            if ((Configuration["Authentication:Twitter:ConsumerAPIKey"] != null) && (Configuration["Authentication:Twitter:ConsumerSecret"] != null))
+            if (Configuration["Authentication:Twitter:ConsumerAPIKey"] != null && (Configuration["Authentication:Twitter:ConsumerSecret"] != null))
             {
                 services.AddAuthentication().AddTwitter(opt =>
                 {
@@ -59,7 +62,7 @@ namespace JustEatIt
                     opt.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
                 });
             }
-            if ((Configuration["Authentication:Google:ClientId"] != null) && (Configuration["Authentication:Google:ClientSecret"] != null))
+            if (Configuration["Authentication:Google:ClientId"] != null && Configuration["Authentication:Google:ClientSecret"] != null)
             {
                 services.AddAuthentication().AddGoogle(opt =>
                 {
@@ -67,7 +70,7 @@ namespace JustEatIt
                     opt.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
             }
-            if ((Configuration["Authentication:Microsoft:ClientId"] != null) && (Configuration["Authentication:Microsoft:ClientSecret"] != null))
+            if (Configuration["Authentication:Microsoft:ClientId"] != null && Configuration["Authentication:Microsoft:ClientSecret"] != null)
             {
                 services.AddAuthentication().AddMicrosoftAccount(opt =>
                 {
@@ -76,7 +79,8 @@ namespace JustEatIt
                 });
             }
 
-            services.AddControllersWithViews();
+            services.AddMvc();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
         }
 
@@ -92,6 +96,7 @@ namespace JustEatIt
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -108,6 +113,8 @@ namespace JustEatIt
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            SeedDataIdentity.EnsurePopulated(app).Wait();
         }
     }
 }
