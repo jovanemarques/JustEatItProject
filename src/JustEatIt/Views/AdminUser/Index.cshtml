@@ -1,0 +1,148 @@
+﻿@model IEnumerable<JustEatIt.Models.UserInfo>
+
+@{
+    ViewData["Title"] = "User control";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <form asp-action="Index" method="get">
+            <div class="row my-3">
+                <div class="col-sm-1">
+                    <label class="control-label">Search: </label>
+                </div>
+                <div class="col-sm-9">
+                    <input name="searchText" class="form-control" value="@ViewData["currentFilter"]"/>
+                </div>
+                <div class="col-sm-2">
+                    <input type="submit" class="btn btn-secondary" value="Search">
+                </div>
+            </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Role)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.Use2FA)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.Local)
+                    </th>
+                    <th class="hide-column">
+                        Ext.Logins
+                    </th>
+                    <th class="text-right">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.Use2FA)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.Local)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.ExternalLogins)
+                        </td>
+                        <td class="text-right">
+                            @*<a class="btn btn-sm fa fa-edit color-blue" asp-action="Edit" asp-route-id="@item.Id" asp-route-role="@item.Role"
+                               asp-route-searchText="@ViewData["currentFilter"]" title="Edit"></a>
+                            <a class="btn btn-sm fa fa-trash-alt cursor-pointer color-red" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"></a>*@
+                            <button class="btn btn-default dropdown-toggle fa fa-ellipsis-v color-green" type="button" data-toggle="dropdown" title="Options"> </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="btn btn-sm" asp-action="Edit" asp-route-id="@item.Id" asp-route-role="@item.Role"
+                                       asp-route-searchText="@ViewData["currentFilter"]" title="Edit"><i class="fa fa-edit"></i>  Edit</a>
+                                </li>
+                                <li><a class="btn btn-sm cursor-pointer" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"><i class="fa fa-trash-alt"></i>  Delete</a></li>
+                                @if (item.Role != "Customer")
+                                {
+                                    <li><a class="btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id, @item.Role, 'Customer')" 
+                                           title="Change Role"><i class="fa fa-user"></i>  Change role to Customer</a></li>
+                                }
+                                @if (item.Role != "Partner")
+                                {
+                                    <li><a class="btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id,  @item.Role, 'Partner')"
+                                           title="Change Role"><i class="fa fa-handshake"></i>  Change role to Partner</a></li>
+                                }
+                                @if (item.Role != "Administrator")
+                                {
+                                    <li><a class="btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id, @item.Role, 'Administrator')"
+                                           title="Change Role"><i class="fa fa-user-shield"></i>  Change role to Admin.</a></li>
+                                }
+                                @if (item.Use2FA)
+                                {
+                                    <li><a class="btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRemove2FA(@item.Id)"
+                                           title="Remove 2FA"><i class="fa fa-lock"></i>  Remove Authenticator</a></li>
+                                }
+                            </ul>
+                            @*<a class="btn btn-sm drop fa fa-ellipsis-v color-green" asp-action="IndexDishAvail" asp-route-dishId="@item.Id"
+                               asp-route-searchText="@ViewData["currentFilter"]" title="Options"></a>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form id="delete-form" class="d-none" asp-action="DeleteUser">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="searchText" value="@ViewData["currentFilter"]">
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            bootbox.confirm({
+                message: "Do you really want to delete this User?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formDelete = document.getElementById('delete-form');
+                        formDelete['id'].value = id;
+                        formDelete.submit();
+                    }
+                }
+            });
+        }
+    </script>
+}

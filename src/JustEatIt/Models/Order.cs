@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,13 +20,16 @@ namespace JustEatIt.Models
         [ForeignKey("Customer")]
         public string CustomerId { get; set; }
 
+        [Display(Name = "Date")]
+        public DateTime OrderedAt;
+
         public virtual Customer Customer { get; set; }
 
         [ForeignKey("Partner")]
         public string PartnerId { get; set; }
 
         public virtual Partner Partner { get; set; }
-
+        
         public decimal GetTotal()
         {
             decimal result = 0;

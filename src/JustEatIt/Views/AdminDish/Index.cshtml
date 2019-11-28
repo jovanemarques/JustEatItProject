@@ -1,0 +1,76 @@
+﻿@model IEnumerable<JustEatIt.Models.DishType>
+
+@{
+    ViewData["Title"] = "Dish Type Administration";
+}
+
+<div class="row">
+    <div class="col-sm-6 my-3">
+        <h1>@ViewData["Title"]</h1>
+        <a class="btn btn-primary mr-3" asp-action="CreateEditDishType">New Dish Type</a>
+        <a class="btn btn-primary mr-3" asp-action="IndexDish">Dishes</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TypeName)
+                    </th>
+                    <th class="text-right">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TypeName)
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-sm fa fa-edit color-blue" asp-action="CreateEditDishType" asp-route-id="@item.Id" title="Edit"></a>
+                            <a class="btn btn-sm fa fa-trash-alt color-red" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form id="delete-form" class="d-none" asp-action="DeleteDishType">
+            <input type="hidden" name="id" value=""/>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            bootbox.confirm({
+                message: "Do you really want to delete this Dish Type?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formDelete = document.getElementById('delete-form');
+                        formDelete['id'].value = id;
+                        formDelete.submit();
+                    }
+                } 
+            });
+        }
+    </script>
+}
+
+

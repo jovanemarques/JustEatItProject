@@ -20,25 +20,25 @@ namespace JustEatIt.Data.Entities
 
         public Partner Save(Partner partner)
         {
-            if (partner.Id == "")
+            Partner dbPartner = context.Partners.FirstOrDefault(r => r.Id == partner.Id);
+            if (dbPartner == null)
             {
-                context.Partners.Add(partner);
+                var newPartner = context.Partners.Add(partner);
+                context.SaveChanges();
+                dbPartner = newPartner.Entity;
             }
             else
             {
-                Partner dbPartner = context.Partners.FirstOrDefault(r => r.Id == partner.Id);
-                if (dbPartner != null)
-                {
-                    dbPartner.Rate = partner.Rate;
-                    dbPartner.Address = partner.Address;
-                    dbPartner.City = partner.City;
-                    dbPartner.PostalCode = partner.PostalCode;
-                    dbPartner.Latitude = partner.Latitude;
-                    dbPartner.Longitude = partner.Longitude;
-                }
+                dbPartner.Rate = partner.Rate;
+                dbPartner.Address = partner.Address;
+                dbPartner.City = partner.City;
+                dbPartner.PostalCode = partner.PostalCode;
+                dbPartner.Latitude = partner.Latitude;
+                dbPartner.Longitude = partner.Longitude;
+                context.SaveChanges();
             }
-            context.SaveChanges();
-            return partner;
+
+            return dbPartner;
         }
 
         public Partner Delete(string id)

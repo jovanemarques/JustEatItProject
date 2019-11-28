@@ -9,17 +9,24 @@
 <h3 class="text-center">Dish availability</h3>
 <div class="row">
     <div class="col-md-6">
-        <div id="ordersChart" class="disp-chart"></div>
+        <div id="ordersChart" class="disp-chart">
+            @if ((@Model.DishesAvailable == 0) && (@Model.DishesSold == 0))
+            {
+                <p>It seems that you do not have a dish to sell this date.</p>
+                <p>Manage your dishes to make a dish available!</p>
+            }
+        </div>
         <h3 class="my-lg-3">Dishes on menu: @Model.DishesMenu</h3>
         <h3 class="my-lg-3">Pending orders: @Model.PendingOrders</h3>
         <h3 class="my-lg-3">Finished orders: @Model.OrdersFinished</h3>
     </div>
     <div class="col-md-6">
-        <a class="my-lg-1 btn btn-success w-100 mt-2" asp-controller="Dish" asp-action="IndexPartner">Dish list</a>
-        <a class="my-lg-1 btn btn-success w-100" asp-controller="Dish" asp-action="IndexPartner">Dish availability</a>
-        <br/>
+        <div class="my-3">
+            <a class="my-lg-1 btn btn-primary w-100 my-3" asp-controller="Dish" asp-action="IndexPartner">Dish list</a>
+        </div>
         <h4>Pending Orders List</h4>
-        <table class="table">
+        <input class="search-name-box" id="searchBox" type="text" onkeyup="filterTable()" placeholder="Search..">
+        <table class="table" id="ordersTable">
             <thead>
                 <tr>
                     <th>
@@ -55,24 +62,61 @@
 </div>
 
 @section Scripts {
+
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Dishes', 'Availability'],
-          ['Available', @Model.DishesAvailable],
-          ['Sold', @Model.DishesSold]
-        ]);
 
-        var options = {
-            pieHole: 0.4,
-            legend: 'none'
-        };
+    var globalResizeTimer = null;
 
-        var chart = new google.visualization.PieChart(document.getElementById('ordersChart'));
-        chart.draw(data, options);
-      }
+    if ((@Model.DishesAvailable != 0) || (Model.DishesSold != 0)) {
+
+        $(window).resize(function () {
+            if (globalResizeTimer != null) window.clearTimeout(globalResizeTimer);
+            globalResizeTimer = window.setTimeout(function () {
+                drawChart();
+            }, 200);
+        });
+
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Dishes', 'Availability'],
+                ['Available', @Model.DishesAvailable],
+                ['Sold', @Model.DishesSold]
+            ]);
+
+            var options = {
+                pieHole: 0.4,
+                //legend: 'none'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('ordersChart'));
+            chart.draw(data, options);
+        }
+    }
+
+    function filterTable() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchBox");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("ordersTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0] + tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
     </script>
 }
