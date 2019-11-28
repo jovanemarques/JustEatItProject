@@ -39,6 +39,12 @@ namespace JustEatIt.Controllers
             return View(_dishRepo.GetAll);
         }
 
+        public ActionResult IndexCustomerList()
+        {
+            // check user and redirect to right page
+            return View(_dishRepo.GetAll);
+        }
+
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
@@ -53,6 +59,7 @@ namespace JustEatIt.Controllers
                 partner.Latitude <= ne_lat && partner.Longitude <= ne_lng
             ).Include("Dishes").ToList();
 
+            // this could be a ViewModel also
             String json = "";
             json += "[";
             var firstPartner = true;

@@ -104,16 +104,7 @@
                 <input type="text" class="form-control" id="search" placeholder="Write a dish name" onkeyup="search(this);">
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="radMapList" id="radMapList1" value="option1" checked>
-                <label class="form-check-label" for="radMapList1">
-                    Map
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="radMapList" id="radMapList2" value="option2">
-                <label class="form-check-label" for="radMapList2">
-                    List
-                </label>
+                <a asp-action="IndexCustomerList">List</a>
             </div>
             <div id="map" style="height:600px"></div>
         </div>

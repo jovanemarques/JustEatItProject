@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using JustEatIt.Models;
 
 namespace JustEatIt.Data
 {
@@ -9,5 +10,6 @@ namespace JustEatIt.Data
             : base(options)
         {
         }
+        public DbSet<JustEatIt.Models.Dish> Dish { get; set; }
     }
 }
