@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,6 +36,11 @@ namespace JustEatIt.Models
             }
 
             return result;
+        }
+
+        public string GetOrderStatus()
+        {
+            return Enum.GetName(typeof(OrderStatus), Status);
         }
     }
 }

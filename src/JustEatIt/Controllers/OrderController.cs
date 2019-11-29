@@ -85,8 +85,7 @@ namespace JustEatIt.Controllers
                     orderItems.FirstOrDefault().DishAvail.DishId)?.PartnerId
             };
 
-            var s = JsonConvert.SerializeObject(order);
-            TempData["order"] = s;
+            TempData["order"] = JsonConvert.SerializeObject(order);
 
             return View("CreditCard", new CreditCard());
         }
