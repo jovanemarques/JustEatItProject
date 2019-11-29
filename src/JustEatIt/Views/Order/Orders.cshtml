@@ -6,9 +6,6 @@
 
 <h1>Orders</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -18,7 +15,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
-            <th></th>
+            <th>
+                Distributor
+            </th>
+            <th>
+                Total
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -28,10 +30,16 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @item.GetOrderStatus()
             </td>
             <td>
-                @Html.ActionLink("Order Info", "OrderDetails", new { id = item.Id })
+                @item.Partner.Name
+            </td>
+            <td>
+                @item.GetTotal()
+            </td>
+            <td>
+                <a asp-action="OrderDetails" asp-route-id="@item.Id"><button class="btn btn-primary">Order Info</button></a>
             </td>
         </tr>
 }
