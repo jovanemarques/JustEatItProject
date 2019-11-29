@@ -1,0 +1,64 @@
+﻿@model JustEatIt.Models.Dish
+
+@{
+    ViewData["Title"] = (Model.Id == 0) ? "Create Dish" : "Edit Dish";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CreateEditDish" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.TypeList, "Id", "Name"))"></select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PartnerId" class="control-label"></label>
+                <select asp-for="PartnerId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.PartnerList, "Id", "Name"))"></select>
+                <span asp-validation-for="PartnerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="File">Image</label>
+                <input type="file" class="form-control-file" asp-for="File">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="IndexDish" asp-route-searchText="@ViewData["currentFilter"]">Back to List</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <link href="~/lib/jquery-customselect/css/jquery-customselect-1.9.1.css" rel="stylesheet" />
+    <script src="~/lib/jquery-customselect/js/jquery-customselect-1.9.1.js"></script>
+
+    <script>
+        $(function () {
+            $("#TypeId").customselect();
+        });
+    </script>
+}
+

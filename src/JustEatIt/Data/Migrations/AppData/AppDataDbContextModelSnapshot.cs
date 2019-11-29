@@ -4,16 +4,14 @@ using JustEatIt.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace JustEatIt.Migrations
+namespace JustEatIt.Data.Migrations.AppData
 {
     [DbContext(typeof(AppDataDbContext))]
-    [Migration("20191116160344_AddPartnerToOrder")]
-    partial class AddPartnerToOrder
+    partial class AppDataDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,13 +125,15 @@ namespace JustEatIt.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("QuantityTotal")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishId")
-                        .IsUnique();
+                    b.HasIndex("DishId");
 
                     b.ToTable("DishesAvail");
                 });
@@ -221,10 +221,10 @@ namespace JustEatIt.Migrations
                         .HasMaxLength(100);
 
                     b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(8, 6)");
+                        .HasColumnType("decimal(8,6)");
 
                     b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9, 6)");
+                        .HasColumnType("decimal(9,6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -262,8 +262,8 @@ namespace JustEatIt.Migrations
             modelBuilder.Entity("JustEatIt.Models.DishAvailability", b =>
                 {
                     b.HasOne("JustEatIt.Models.Dish", "Dish")
-                        .WithOne("DishAvailability")
-                        .HasForeignKey("JustEatIt.Models.DishAvailability", "DishId")
+                        .WithMany("DishAvailabilities")
+                        .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

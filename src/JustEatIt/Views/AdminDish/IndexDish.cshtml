@@ -1,0 +1,103 @@
+﻿@model IEnumerable<JustEatIt.Models.Dish>
+
+@{
+    ViewData["Title"] = "Dish Administration";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h1>@ViewData["Title"]</h1>
+        <a class="btn btn-primary mr-3" asp-action="CreateEditDish" asp-route-searchText="@ViewData["currentFilter"]">New Dish</a>
+        <a class="btn btn-primary mr-3" asp-action="Index">Dishes Types</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <form asp-action="IndexDish" method="get">
+            <div class="row my-3">
+                <div class="col-sm-1">
+                    <label class="control-label">Search: </label>
+                </div>
+                <div class="col-sm-9">
+                    <input name="searchText" class="form-control" value="@ViewData["currentFilter"]"/>
+                </div>
+                <div class="col-sm-2">
+                    <input type="submit" class="btn btn-secondary" value="Search">
+                </div>
+            </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Partner)
+                    </th>
+                    <th class="text-right">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type.TypeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Partner.Name)
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-sm fa fa-edit color-blue" asp-action="CreateEditDish" asp-route-id="@item.Id"
+                               asp-route-searchText="@ViewData["currentFilter"]" title="Edit"></a>
+                            <a class="btn btn-sm fa fa-trash-alt cursor-pointer color-red" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"></a>
+                            <a class="btn btn-sm fa fa-list-ul color-green" asp-action="IndexDishAvail" asp-route-dishId="@item.Id"
+                               asp-route-searchText="@ViewData["currentFilter"]" title="View Availability"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form id="delete-form" class="d-none" asp-action="DeleteDish">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="searchText" value="@ViewData["currentFilter"]">
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            bootbox.confirm({
+                message: "Do you really want to delete this Dish?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formDelete = document.getElementById('delete-form');
+                        formDelete['id'].value = id;
+                        formDelete.submit();
+                    }
+                }
+            });
+        }
+    </script>
+}

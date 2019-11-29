@@ -1,4 +1,5 @@
 ﻿using JustEatIt.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace JustEatIt.Data.Entities
@@ -12,7 +13,9 @@ namespace JustEatIt.Data.Entities
             this.context = context;
         }
 
-        public IQueryable<Dish> GetAll => context.Dishes;
+        public IQueryable<Dish> GetAll => context.Dishes
+            .Include(d => d.Type)
+            .Include(d => d.Partner);
 
         public int Save(Dish dish)
         {

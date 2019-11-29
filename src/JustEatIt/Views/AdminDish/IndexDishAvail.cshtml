@@ -1,0 +1,110 @@
+﻿@model IEnumerable<JustEatIt.Models.DishAvailability>
+
+@{
+    ViewData["Title"] = "Dish Availability Administration";
+    Dish dish = ViewData["availDish"] as Dish;
+}
+
+<div class="row">
+    <div class="col-sm-12 my-3">
+        <h1>@ViewData["Title"]</h1>
+        <h5>Dish: @dish?.Name</h5>
+        <a class="btn btn-primary mr-3" asp-action="CreateEditDishAvail" asp-route-dishId="@dish.Id">New Dish Availability</a>
+        <a class="btn btn-primary mr-3" asp-action="IndexDish" asp-route-searchText="@ViewData["currentFilter"]">Return to Dishes</a>
+        <a class="btn btn-primary mr-3" asp-action="Index">Dish Types</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.OriginalPrice)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.DiscountPrice)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.QuantityTotal)
+                    </th>
+                    <th class="hide-column">
+                        @Html.DisplayNameFor(model => model.Quantity)
+                    </th>
+                    <th class="text-right">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndDate)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.OriginalPrice)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.DiscountPrice)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.QuantityTotal)
+                        </td>
+                        <td class="hide-column">
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-sm fa fa-edit color-blue" asp-action="CreateEditDishAvail" asp-route-id="@item.Id"
+                               asp-route-dishId="@item.DishId" title="Edit"></a>
+                            <a class="btn btn-sm fa fa-trash-alt cursor-pointer color-red" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <form id="delete-form" class="d-none" asp-action="DeleteDishAvail">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="dishId" value="@dish.Id">
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id) {
+            bootbox.confirm({
+                message: "Do you really want to delete this Dish Availability?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formDelete = document.getElementById('delete-form');
+                        formDelete['id'].value = id;
+                        formDelete.submit();
+                    }
+                }
+            });
+        }
+    </script>
+}
+

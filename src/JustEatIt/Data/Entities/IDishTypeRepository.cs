@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JustEatIt.Data.Entities
 {
-    interface IDishTypeRepository
+    public interface IDishTypeRepository
     {
         IQueryable<DishType> GetAll { get; }
 

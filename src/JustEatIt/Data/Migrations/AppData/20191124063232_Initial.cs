@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace JustEatIt.Migrations
+namespace JustEatIt.Data.Migrations.AppData
 {
-    public partial class AddedNewEntities : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,26 +70,6 @@ namespace JustEatIt.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: false),
-                    CustomerId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Dishes",
                 columns: table => new
                 {
@@ -118,6 +98,33 @@ namespace JustEatIt.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(nullable: false),
+                    CustomerId = table.Column<string>(nullable: true),
+                    PartnerId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_Partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "Partners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DishesAvail",
                 columns: table => new
                 {
@@ -128,6 +135,7 @@ namespace JustEatIt.Migrations
                     OriginalPrice = table.Column<decimal>(type: "decimal(11, 2)", nullable: false),
                     DiscountPrice = table.Column<decimal>(type: "decimal(11, 2)", nullable: false),
                     Quantity = table.Column<int>(nullable: false),
+                    QuantityTotal = table.Column<int>(nullable: false),
                     DishId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -181,8 +189,7 @@ namespace JustEatIt.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_DishesAvail_DishId",
                 table: "DishesAvail",
-                column: "DishId",
-                unique: true);
+                column: "DishId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_DishAvailabilityId",
@@ -198,6 +205,11 @@ namespace JustEatIt.Migrations
                 name: "IX_Orders_CustomerId",
                 table: "Orders",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_PartnerId",
+                table: "Orders",
+                column: "PartnerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
