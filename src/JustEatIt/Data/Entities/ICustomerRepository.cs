@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JustEatIt.Data.Entities
 {
-    interface ICustomerRepository
+    public interface ICustomerRepository
     {
         IQueryable<Customer> GetAll { get; }
         string Save(Customer customer);

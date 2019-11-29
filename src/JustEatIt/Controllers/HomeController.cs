@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using JustEatIt.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JustEatIt.Controllers
 {
@@ -17,6 +18,25 @@ namespace JustEatIt.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult IndexRole()
+        {
+            if (User.IsInRole("Customer"))
+            {
+                return View(nameof(Index));
+            }
+            else if (User.IsInRole("Partner"))
+            {
+                return RedirectToAction("Index", "Partner");
+            }
+            else if (User.IsInRole("Administrator"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

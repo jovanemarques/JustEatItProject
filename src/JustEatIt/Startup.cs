@@ -32,17 +32,21 @@ namespace JustEatIt
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                 //opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-JustEatIt-4FC033CA-1AC9-4629-AAC1-2DDF874D5126;Trusted_Connection=True;MultipleActiveResultSets=true"));
 
-            services.AddTransient<IDishRepository, EFDishRepository>();
-            services.AddTransient<IPartnerRepository, EFPartnerRepository>();
-
-            services.AddIdentity<IdentityUser, IdentityRole>(opts => opts.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<CustomUser, IdentityRole>(opts => opts.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddTransient<IDishRepository, EFDishRepository>();
+            services.AddTransient<IPartnerRepository, EFPartnerRepository>();
+            services.AddTransient<ICustomerRepository, EFCustomerRepository>();
             services.AddTransient<IOrderRepository, EFOrderRepository>();
             services.AddTransient<IDishAvailabilityRepository, EFDishAvailabilityRepository>();
+            services.AddTransient<IDishTypeRepository, EFDishTypeRepository>();
             services.AddTransient<IItemOrderRepository, EFItemOrderRepository>();
+            services.AddTransient<IUserRepository, EFUserRepository>();
+
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             // Verify which keys is available and add authentication for them
@@ -78,6 +82,13 @@ namespace JustEatIt
                     opt.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
                 });
             }
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = $"/Identity/Account/Login";
+                options.LogoutPath = $"/Identity/Account/Logout";
+                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            });
 
             services.AddMvc();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();

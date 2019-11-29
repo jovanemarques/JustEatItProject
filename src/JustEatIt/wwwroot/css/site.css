@@ -35,6 +35,11 @@ html {
   }
 }
 
+@media only screen and (max-width: 900px) {
+    .hide-column {
+        display: none;
+    }
+}
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
@@ -165,3 +170,29 @@ img, embed, video, object {
     height: 40vh!important;
 }
 
+.color-red:hover {
+    color: red;
+}
+
+.color-blue:hover {
+    color: dodgerblue;
+}
+
+.color-green:hover {
+    color: forestgreen;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.search-name-box {
+    background-image: url('/css/search-icon.png'); /* Add a search icon to input */
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 100%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+}

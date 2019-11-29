@@ -7,12 +7,12 @@ namespace JustEatIt.Data
     {
         public AppDataDbContext(DbContextOptions<AppDataDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DishAvailability>().HasOne(x => x.Dish);
+            modelBuilder.Entity<Partner>().Property(p => p.Longitude).HasColumnType("decimal(9, 6)");
+            modelBuilder.Entity<Partner>().Property(p => p.Latitude).HasColumnType("decimal(8, 6)");
         }
 
         public DbSet<ContactUs> ContactUs { get; set; }
