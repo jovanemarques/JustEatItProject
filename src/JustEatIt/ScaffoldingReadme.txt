@@ -21,4 +21,3 @@ The generated UI requires MVC. To add MVC to your app:
 
 Apps that use ASP.NET Core Identity should also use HTTPS. To enable HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.
 
-    //"DefaultConnection": "Server=justeatit-db.csab0ctvripw.us-east-1.rds.amazonaws.com;Database=justeatit-db;User Id=sqladmin;Password=$t5mUQqx428U&V*VMXd"

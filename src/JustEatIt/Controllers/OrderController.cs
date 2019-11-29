@@ -15,19 +15,22 @@ namespace JustEatIt.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IDishRepository _dishRepository;
+        private readonly IPartnerRepository _partnerRepository;
         private readonly IDishAvailabilityRepository _dishAvailabilityRepository;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<CustomUser> _userManager;
 
         public OrderController(
             IOrderRepository orderRepository,
-            UserManager<IdentityUser> userManager,
+            UserManager<CustomUser> userManager,
             IDishRepository dishRepository,
-            IDishAvailabilityRepository dishAvailabilityRepository)
+            IDishAvailabilityRepository dishAvailabilityRepository,
+            IPartnerRepository partnerRepository)
         {
             _orderRepository = orderRepository;
             _dishRepository = dishRepository;
             _userManager = userManager;
             _dishAvailabilityRepository = dishAvailabilityRepository;
+            _partnerRepository = partnerRepository;
         }
 
         [HttpGet]
@@ -49,11 +52,29 @@ namespace JustEatIt.Controllers
 
             foreach (var availableDish in availableDishes)
             {
-                createOrderViewModel.OrderItems.Add(new OrderItem { DishAvail =  availableDish, Quantity = 0});
+                createOrderViewModel.OrderItems.Add(new OrderItem { DishAvail = availableDish, Quantity = 0 });
             }
 
             return View(createOrderViewModel);
         }
+/*
+        [HttpGet]
+        [Route("createByPartner/{partnerId}")]
+        public IActionResult CreateByPartner(string partnerId)
+        {
+            var partners = _partnerRepository.GetAll;
+            var partner = partners.Where(p => p.Id == partnerId).FirstOrDefault();
+            var availableDishes = partner.Dishes;
+
+            var createOrderViewModel = new CreateOrder();
+
+            foreach (var availableDish in availableDishes)
+            {
+                createOrderViewModel.OrderItems.Add(new OrderItem { DishAvail = availableDish, Quantity = 0 });
+            }
+
+            return View(createOrderViewModel);
+        }*/
 
         [HttpPost]
         [Route("create")]

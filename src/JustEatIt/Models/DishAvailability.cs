@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,13 +27,18 @@ namespace JustEatIt.Models
         [Column(TypeName = "decimal(11, 2)")]
         public decimal DiscountPrice { get; set; }
 
-        [Required]
+        [Display(Name = "Available")]
         public int Quantity { get; set; }
 
+        [Required]
+        [Display(Name = "Quantity")]
+        public int QuantityTotal { get; set; }
+
+        [Required]
         [ForeignKey("Dish")]
         public int DishId { get; set; }
 
-        [Required]
+        [BindNever]
         public virtual Dish Dish { get; set; }
     }
 }

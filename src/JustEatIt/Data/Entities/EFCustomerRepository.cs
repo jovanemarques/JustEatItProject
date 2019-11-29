@@ -21,7 +21,8 @@ namespace JustEatIt.Data.Entities
         {
             Customer dbCustomer;
 
-            if (customer.Id == "")
+            dbCustomer = context.Customers.FirstOrDefault(c => c.Id == customer.Id);
+            if (dbCustomer == null)
             {
                 var newCustomer = context.Customers.Add(customer);
                 context.SaveChanges();
@@ -29,18 +30,14 @@ namespace JustEatIt.Data.Entities
             }
             else
             {
-                dbCustomer = context.Customers.FirstOrDefault(c => c.Id == customer.Id);
-                if (dbCustomer != null)
-                {
-                    dbCustomer.FirstName = customer.FirstName;
-                    dbCustomer.LastName = customer.LastName;
-                    dbCustomer.Address = customer.Address;
-                    dbCustomer.City = customer.City;
-                    dbCustomer.PostalCode = customer.PostalCode;
-                }
+                dbCustomer.FirstName = customer.FirstName;
+                dbCustomer.LastName = customer.LastName;
+                dbCustomer.Address = customer.Address;
+                dbCustomer.City = customer.City;
+                dbCustomer.PostalCode = customer.PostalCode;
+                context.SaveChanges();
             }
 
-            context.SaveChanges();
             return dbCustomer.Id;
         }
 

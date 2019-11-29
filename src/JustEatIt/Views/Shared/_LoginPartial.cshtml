@@ -1,47 +1,56 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<CustomUser> SignInManager
+@inject UserManager<CustomUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    bool isAdmin = User.IsInRole("Administrator");
-    bool isPartner = User.IsInRole("Partner");
-    bool isCustomer = User.IsInRole("Customer");
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            bool isAdmin = User.IsInRole("Administrator");
+            bool isPartner = User.IsInRole("Partner");
+            bool isCustomer = User.IsInRole("Customer");
+            string userName = (await UserManager.FindByEmailAsync(User.Identity.Name)).Name;
 
-    if (isAdmin)
-    {
-        <li class="nav-item">
-            <a  class="nav-link text-light" asp-controller="Admin" asp-action="Index" title="Partner">Admin</a>
-        </li>    
-    }
-    if (isAdmin || isPartner) {
-        <li class="nav-item">
-            <a  class="nav-link text-light" asp-controller="Partner" asp-action="Index" title="Partner">Partner</a>
-        </li>    
-    }
-    if (isAdmin || isCustomer)
-    {
-        <li class="nav-item">
-            <a  class="nav-link text-light" asp-controller="Order" asp-action="Orders" title="Orders">Orders</a>
-        </li>
-    }
-    <li class="nav-item">
-        <a  class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-light">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+            if (userName == null)
+            {
+                userName = User.Identity.Name.Substring(0, User.Identity.Name.IndexOf('@'));
+            }
+
+            if (isAdmin)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="Admin" asp-action="Index" title="Partner">Admin</a>
+                </li>
+
+            }
+            else if (isPartner)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="Partner" asp-action="Index" title="Partner">Partner</a>
+                </li>
+
+            }
+            else if (isCustomer)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="Order" asp-action="Orders" title="Orders">Orders</a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName!</a>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-light">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        }
+    </ul>

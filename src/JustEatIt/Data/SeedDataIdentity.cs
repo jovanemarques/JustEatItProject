@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using JustEatIt.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,8 +16,8 @@ namespace JustEatIt.Data
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 //Resolve ASP .NET Core Identity with DI help
-                UserManager<IdentityUser> userManager = scope.ServiceProvider
-                    .GetRequiredService<UserManager<IdentityUser>>();
+                UserManager<CustomUser> userManager = scope.ServiceProvider
+                    .GetRequiredService<UserManager<CustomUser>>();
                 RoleManager<IdentityRole> roleManager = scope.ServiceProvider
                     .GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -45,16 +46,16 @@ namespace JustEatIt.Data
                 }
 
                 // If not find the admin user, create it
-                IdentityUser admUser = await userManager.FindByNameAsync("csjusteatit@gmail.com");
+                CustomUser admUser = await userManager.FindByNameAsync("justeatit.cs@gmail.com");
                 if (admUser == null)
                 {
-                    admUser = new IdentityUser {
-                        UserName = "csjusteatit@gmail.com",
-                        Email = "csjusteatit@gmail.com",
+                    admUser = new CustomUser {
+                        UserName = "justeatit.cs@gmail.com",
+                        Email = "justeatit.cs@gmail.com",
                         EmailConfirmed = true
                     };
                     await userManager.CreateAsync(admUser, "justEatIt5$");
-                    admUser = await userManager.FindByNameAsync("csjusteatit@gmail.com");
+                    admUser = await userManager.FindByNameAsync("justeatit.cs@gmail.com");
 
                     // Add the roles to admin
                     await userManager.AddToRoleAsync(admUser, "Administrator");
