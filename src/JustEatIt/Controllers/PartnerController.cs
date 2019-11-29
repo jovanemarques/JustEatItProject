@@ -6,6 +6,7 @@ using JustEatIt.Models;
 using JustEatIt.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JustEatIt.Controllers
 {
@@ -27,14 +28,14 @@ namespace JustEatIt.Controllers
         public IActionResult Index()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var curDate = DateTime.Now;
+            var curDate = DateTime.Now.Date;
 
             var dishAvailList = dishAvailRepo.GetAll.Where(da =>
-                da.StartDate <= curDate && da.EndDate >= curDate &&
+                da.StartDate.Date == curDate &&
                 da.Dish.PartnerId == userId).ToList();
 
             var orderList = orderRepo.GetAll.Where(o =>
-                o.PartnerId == userId);
+                o.PartnerId == userId).ToList();
 
             int dishesSold = 0;
             foreach (var order in orderList)

@@ -19,7 +19,8 @@ namespace JustEatIt.Data.Entities
         }
 
         public IQueryable<Order> GetAll => _context.Orders
-            .Include(i => i.Items)
+            .Include(c => c.Customer)
+            .Include(i => i.Items)            
             .ThenInclude(da => da.DishAvail)
             .ThenInclude(d => d.Dish);
 
@@ -40,7 +41,7 @@ namespace JustEatIt.Data.Entities
 
         public Order GetOrderById(int id)
         {
-            return _context.Orders.Include(x => x.Items).ThenInclude(c => c.DishAvail.Dish).FirstOrDefault(order => order.Id == id);
+            return _context.Orders.Include(x => x.Partner).Include(x => x.Items).ThenInclude(c => c.DishAvail.Dish).FirstOrDefault(order => order.Id == id);
         }
 
         public bool UpdateStatus(long orderId, int status)
@@ -60,7 +61,11 @@ namespace JustEatIt.Data.Entities
 
         public IEnumerable<Order> GetOrdersForCustomer(string customerId)
         {
-            return _context.Orders.Where(order => order.Customer.Id.Equals(customerId)).Include(x => x.Items).ToList();
+            return _context.Orders.Where(order => order.Customer.Id.Equals(customerId))
+                .Include(x => x.Partner)
+                .Include(x => x.Items)
+                .ThenInclude(da => da.DishAvail)
+                .ToList();
         }
     }
 }

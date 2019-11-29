@@ -25,7 +25,7 @@ namespace JustEatIt.Controllers
         {
             if (User.IsInRole("Customer"))
             {
-                return View(nameof(Index));
+                return RedirectToAction("Index", "Dish");
             }
             else if (User.IsInRole("Partner"))
             {
