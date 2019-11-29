@@ -147,13 +147,18 @@ namespace JustEatIt.Controllers
         [Authorize(Roles = "Partner")]
         public ActionResult Edit(int dishId)
         {
-            IQueryable<Dish> dishes = _dishRepo.GetAll;
-            var myDished = dishes.ToList().Where(d => d.Id == dishId);
+            var myDished = _dishRepo.GetAll.FirstOrDefault(d => d.Id == dishId);
+
+            if (myDished == null)
+            {
+                TempData["StatusMessage"] = "#E#:Unable to find the Dish to edit.";
+                return RedirectToAction(nameof(IndexPartner));
+            }
 
             ViewBag.TypeList = _typeRepo.GetAll.OrderBy(t => t.TypeName).Select(t => new { Id = t.Id, Name = t.TypeName }).ToList();
             ViewBag.TypeList.Insert(0, new { Id = 0, Name = "Select a Type" });
 
-            return View("Create", dishes.First());
+            return View("Create", myDished);
         }
 
         [HttpPost]
@@ -282,7 +287,7 @@ namespace JustEatIt.Controllers
 
                 if ((dishSold > 0) && ((dbAvail.StartDate.CompareTo(avail.StartDate) != 0) || (dbAvail.StartDate.CompareTo(avail.StartDate) != 0)))
                 {
-                    ModelState.AddModelError("StartDate", "You cannot change the Start Date or End Date when this dish was was already sold.");
+                    ModelState.AddModelError("StartDate", "You cannot change the Available from or Expire date when this dish was was already sold.");
                 }
             }
             else
@@ -292,9 +297,9 @@ namespace JustEatIt.Controllers
 
             // Validate all the fields for both new and edit
             var interval = avail.EndDate.Subtract(avail.StartDate).Hours;
-            if (avail.StartDate.CompareTo(avail.EndDate) <= 0)
+            if (avail.StartDate.CompareTo(avail.EndDate) >= 0)
             {
-                ModelState.AddModelError("StartDate", $"The Start Date must be less than End Date.");
+                ModelState.AddModelError("StartDate", $"The Available from date must be less than Expire date.");
             }
             else if (interval < 2)
             {
@@ -310,9 +315,9 @@ namespace JustEatIt.Controllers
                 ModelState.AddModelError("StartDate", $"The Start Date must be between 6:00AM and 21:59PM.");
             }
 
-            if ((avail.EndDate.Hour > 2) || (avail.EndDate.Hour <= 7)) 
+            if ((avail.EndDate.Hour > 2) && (avail.EndDate.Hour <= 7)) 
             {
-                ModelState.AddModelError("StartDate", $"The End Date must be between 8:00AM and 2:59AM.");
+                ModelState.AddModelError("EndDate", $"The End Date must be between 8:00AM and 2:59AM.");
             }
             
 
