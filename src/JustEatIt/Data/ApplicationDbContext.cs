@@ -11,6 +11,6 @@ namespace JustEatIt.Data
         {
         }
 
-
+        public DbSet<JustEatIt.Models.Dish> Dish { get; set; }
     }
 }
