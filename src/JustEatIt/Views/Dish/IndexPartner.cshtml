@@ -28,7 +28,7 @@
                             <b>@dish.Name</b> - @dish.Description
                         </div>
                         <div class="col-2">
-                            <a class="btn btn-sm fa fa-edit color-blue" asp-action="CreateEditDish" asp-route-id="@dish.Id" title="Edit"></a>
+                            <a class="btn btn-sm fa fa-edit color-blue" asp-action="Edit" asp-route-dishId="@dish.Id" title="Edit"></a>
                             <a class="btn btn-sm fa fa-trash-alt cursor-pointer color-red" tabindex="1" onclick="confirmDelete(@dish.Id)" title="Delete"></a>
                             <a class="btn btn-sm fa fa-list-ul color-green" asp-action="IndexDishAvail" asp-route-dishId="@dish.Id" title="View Availability"></a>
                         </div>
