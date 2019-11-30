@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -64,10 +65,10 @@ namespace JustEatIt.Controllers
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
-            decimal ne_lat = Decimal.Parse(ne[0]);
-            decimal ne_lng = Decimal.Parse(ne[1]);
-            decimal sw_lat = Decimal.Parse(sw[0]);
-            decimal sw_lng = Decimal.Parse(sw[1]);
+            decimal ne_lat = Decimal.Parse(ne[0], CultureInfo.InvariantCulture);
+            decimal ne_lng = Decimal.Parse(ne[1], CultureInfo.InvariantCulture);
+            decimal sw_lat = Decimal.Parse(sw[0], CultureInfo.InvariantCulture);
+            decimal sw_lng = Decimal.Parse(sw[1], CultureInfo.InvariantCulture);
 
             var partners = _partnerRepo.GetAll
             .Where(partner =>
