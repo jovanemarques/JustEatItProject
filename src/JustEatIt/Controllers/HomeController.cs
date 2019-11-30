@@ -61,7 +61,6 @@ namespace JustEatIt.Controllers
 
         public IActionResult SSLValidation(string sslName)
         {
-            string wwwRoot = hEnv.WebRootPath;
             string filepath = "C:\\Temp\\";
             string filename = sslName;
             IFileProvider provider = new PhysicalFileProvider(filepath);
