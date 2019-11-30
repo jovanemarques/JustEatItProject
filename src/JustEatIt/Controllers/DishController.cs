@@ -78,6 +78,7 @@ namespace JustEatIt.Controllers
             {
                 json += firstPartner ? "" : ",";
                 json += "   {";
+                json += "       \"id\":\"" + partner.Id + "\",";
                 json += "       \"name\":\"" + partner.Name + "\",";
                 json += "       \"location\": { \"lat\": " + partner.Latitude + ", \"lng\": " + partner.Longitude + " },";
                 json += "       \"dishes\": [";

@@ -37,7 +37,7 @@
                 let contentString = '<div id="content">' +
                     '<div id="siteNotice">' +
                     '</div>' +
-                    '<h3 id="firstHeading" class="firstHeading">' + p.name + '</h3>' +
+                    '<h3 id="firstHeading" class="firstHeading"> <a href="/order/createByPartner/'+p.id+'">' + p.name + '</a></h3>' +
                     '<div id="bodyContent">';
                 p.dishes.forEach(d => {
                     contentString += '<p>' + d + '</p>';
