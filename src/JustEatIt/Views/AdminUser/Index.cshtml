@@ -9,16 +9,6 @@
         <h1>@ViewData["Title"]</h1>
     </div>
 </div>
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown button
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="#">Action</a>
-        <a class="dropdown-item" href="#">Another action</a>
-        <a class="dropdown-item" href="#">Something else here</a>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-sm-12">
@@ -84,33 +74,30 @@
                             @Html.DisplayFor(modelItem => item.ExternalLogins)
                         </td>
                         <td class="text-right">
-                            @*<a class="btn btn-sm fa fa-edit color-blue" asp-action="Edit" asp-route-id="@item.Id" asp-route-role="@item.Role"
-                                   asp-route-searchText="@ViewData["currentFilter"]" title="Edit"></a>
-                                <a class="btn btn-sm fa fa-trash-alt cursor-pointer color-red" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"></a>*@
-                            <div class="dropdown">                                
-                                <a class="btn btn-default dropdown-toggle fa fa-ellipsis-v color-green" href="#" role="button"  id="dropdownMenuOptions" data-toggle="dropdown" title="Options" aria-haspopup="true" aria-expanded="false" > </a>
+                            <div class="dropdown">
+                                <a class="btn btn-default dropdown-toggle fa fa-ellipsis-v color-green" href="#" role="button" id="dropdownMenuOptions" data-toggle="dropdown" title="Options" aria-haspopup="true" aria-expanded="false"> </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOptions">
                                     <a class="dropdown-item btn btn-sm" asp-action="Edit" asp-route-id="@item.Id" asp-route-role="@item.Role"
                                        asp-route-searchText="@ViewData["currentFilter"]" title="Edit"><i class="fa fa-edit"></i>  Edit</a>
-                                    <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmDelete(@item.Id)" title="Delete"><i class="fa fa-trash-alt"></i>  Delete</a>
+                                    <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmDelete('@item.Id')" title="Delete"><i class="fa fa-trash-alt"></i>  Delete</a>
                                     @if (item.Role != "Customer")
                                     {
-                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id, @item.Role, 'Customer')"
+                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange('@item.Id', '@item.Role', 'Customer')"
                                            title="Change Role"><i class="fa fa-user"></i>  Change role to Customer</a>
                                     }
                                     @if (item.Role != "Partner")
                                     {
-                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id,  @item.Role, 'Partner')"
+                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange('@item.Id',  '@item.Role', 'Partner')"
                                            title="Change Role"><i class="fa fa-handshake"></i>  Change role to Partner</a>
                                     }
                                     @if (item.Role != "Administrator")
                                     {
-                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange(@item.Id, @item.Role, 'Administrator')"
+                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRoleChange('@item.Id', '@item.Role', 'Administrator')"
                                            title="Change Role"><i class="fa fa-user-shield"></i>  Change role to Admin.</a>
                                     }
                                     @if (item.Use2FA)
                                     {
-                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRemove2FA(@item.Id)"
+                                        <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmRemove2FA('@item.Id')"
                                            title="Remove 2FA"><i class="fa fa-lock"></i>  Remove Authenticator</a>
                                     }
                                 </div>
@@ -128,7 +115,7 @@
 </div>
 
 
-@section Scripts {    
+@section Scripts {
     <script>
         function confirmDelete(id) {
             bootbox.confirm({
