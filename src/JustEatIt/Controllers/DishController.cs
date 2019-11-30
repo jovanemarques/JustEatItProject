@@ -30,6 +30,7 @@ namespace JustEatIt.Controllers
             _partnerRepo = partnerRepository;
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult Index()
         {
             // check if user is custumer or partner and redirect to right page
@@ -45,18 +46,21 @@ namespace JustEatIt.Controllers
             return View(_dishRepo.GetAll.Where(d => d.Partner.Id.Equals(user.Id)));
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomer()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomerList()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
