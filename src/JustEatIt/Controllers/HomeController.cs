@@ -62,7 +62,7 @@ namespace JustEatIt.Controllers
         public IActionResult SSLValidation(string sslName)
         {
             string wwwRoot = hEnv.WebRootPath;
-            string filepath = Path.Combine(wwwRoot, ".well-known/acme-challenge/");
+            string filepath = "C:\\Temp\\";
             string filename = sslName;
             IFileProvider provider = new PhysicalFileProvider(filepath);
             IFileInfo fileInfo = provider.GetFileInfo(filename);

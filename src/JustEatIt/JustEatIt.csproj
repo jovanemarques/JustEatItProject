@@ -76,4 +76,9 @@
     <Folder Include="wwwroot\lib\jquery-customselect\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Include="wwwroot\.well-known\acme-challenge\bdt4bdQ51riiql7I6PJ3U2GFvnqFptv7KCd8qI1BDzc" />
+  </ItemGroup>
+
 </Project>

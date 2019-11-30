@@ -118,15 +118,17 @@ namespace JustEatIt
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
+                
                 endpoints.MapControllerRoute(
                     name: "sslfile",
                     pattern: "/.well-known/acme-challenge/{sslName}",
                     defaults: new { controller = "Home", action = "SSLValidation" });
 
-                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
 
