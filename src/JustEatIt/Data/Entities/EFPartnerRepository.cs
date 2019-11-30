@@ -51,17 +51,32 @@ namespace JustEatIt.Data.Entities
             }
             return dbPartner;
         }
-/*
-        public IQueryable<DishAvailability> GetDishAvailabilitiesByPartnerId(string partnerId)
+
+        public void DeleteAll(string id)
         {
-            IQueryable < Partner > partners = context.Partners;
-            Partner partner = partners.Where(p => p.Id.Equals(partnerId));
-            IList < DishAvailability > dishesAv = new List<DishAvailability>();
-            foreach (var dish in partner.Dishes)
+            // Remove the orders
+            var orders = context.Orders.Where(o => o.PartnerId == id).Include(o => o.Items);
+            if (orders.Count() > 0)
             {
-                dishesAv.Add(dish.DishAvailabilities);
+                context.Orders.RemoveRange(orders);
             }
-            return null;
-        }*/
+
+            // Remove the dishes
+            var dishes = context.Dishes.Where(d => d.PartnerId == id).Include(d => d.DishAvailabilities);
+            if (dishes.Count() > 0)
+            {
+                context.Dishes.RemoveRange(dishes);
+            }
+
+            // Remove the partner
+            var partner = context.Partners.FirstOrDefault(p => p.Id == id);
+            if (partner != null)
+            {
+                context.Partners.Remove(partner);
+            }
+
+            context.SaveChanges();
+            return;
+        }
     }
 }

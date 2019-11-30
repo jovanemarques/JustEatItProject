@@ -45,6 +45,10 @@
     <Compile Include="Data\Migrations\AppData\AppDataDbContextModelSnapshot.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="wwwroot\.well-known\acme-challenge\description.txt" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />

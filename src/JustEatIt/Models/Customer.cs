@@ -26,6 +26,6 @@ namespace JustEatIt.Models
         [Display(Name = "Postal code")]
         public string PostalCode { get; set; }
 
-        public string FullName => (LastName?.Trim()?.Length > 0) ? $"{FirstName.Trim()} {LastName.Trim()}" : FirstName.Trim();
+        public string FullName => (LastName?.Trim()?.Length > 0) ? $"{FirstName?.Trim()} {LastName.Trim()}" : FirstName?.Trim();
     }
 }

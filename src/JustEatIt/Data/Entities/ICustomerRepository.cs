@@ -9,7 +9,11 @@ namespace JustEatIt.Data.Entities
     public interface ICustomerRepository
     {
         IQueryable<Customer> GetAll { get; }
+
         string Save(Customer customer);
+
         Customer Delete(string customerId);
+
+        void DeleteAll(string customerId);
     }
 }

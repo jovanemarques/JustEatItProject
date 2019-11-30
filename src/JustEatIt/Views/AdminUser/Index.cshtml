@@ -77,7 +77,7 @@
                             <div class="dropdown">
                                 <a class="btn btn-default dropdown-toggle fa fa-ellipsis-v color-green" href="#" role="button" id="dropdownMenuOptions" data-toggle="dropdown" title="Options" aria-haspopup="true" aria-expanded="false"> </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuOptions">
-                                    <a class="dropdown-item btn btn-sm" asp-action="Edit" asp-route-id="@item.Id" asp-route-role="@item.Role"
+                                    <a class="dropdown-item btn btn-sm" asp-action="EditUser" asp-route-id="@item.Id" asp-route-role="@item.Role"
                                        asp-route-searchText="@ViewData["currentFilter"]" title="Edit"><i class="fa fa-edit"></i>  Edit</a>
                                     <a class="dropdown-item btn btn-sm cursor-pointer" tabindex="1" onclick="confirmDelete('@item.Id')" title="Delete"><i class="fa fa-trash-alt"></i>  Delete</a>
                                     @if (item.Role != "Customer")
@@ -107,10 +107,20 @@
                 }
             </tbody>
         </table>
-        <form id="delete-form" class="d-none" asp-action="DeleteUser">
+        <form id="delete-form" class="d-none" asp-action="Delete">
             <input type="hidden" name="id" value="" />
             <input type="hidden" name="searchText" value="@ViewData["currentFilter"]">
         </form>
+        <form id="role-change-form" class="d-none" method="get" asp-action="ChangeRole">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="newRole" value="" />
+            <input type="hidden" name="searchText" value="@ViewData["currentFilter"]">
+        </form>
+        <form id="remove-2fa-form" class="d-none" asp-action="Remove2FA">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="searchText" value="@ViewData["currentFilter"]">
+        </form>
+
     </div>
 </div>
 
@@ -134,10 +144,63 @@
                     if (result) {
                         var formDelete = document.getElementById('delete-form');
                         formDelete['id'].value = id;
+                        formDelete['searchText'].value = "@ViewData["currentFilter"]";
                         formDelete.submit();
                     }
                 }
             });
         }
+        function confirmRoleChange(id, oldRole, newRole) {
+            var msgTxt = "<h3>ATTENTION!</h3><p>Change the user role to &apos;" + newRole + "&apos; will wipe all specific information for role &apos;"
+                + oldRole + "&apos;.</p><p>Are you sure do you want to countinue?</p>";
+
+            bootbox.confirm({
+                message: msgTxt,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formRoleChange = document.getElementById('role-change-form');
+                        formRoleChange['id'].value = id;
+                        formRoleChange['newRole'].value = newRole;
+                        formRoleChange['searchText'].value = "@ViewData["currentFilter"]";
+
+                        formRoleChange.submit();
+                    }
+                }
+            });
+        }
+        function confirmRemove2FA(id) {
+            bootbox.confirm({
+                message: "Do you really want to remove the Two-Factor Authentication from this user?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        var formRemove2FA = document.getElementById('remove-2fa-form');
+                        formRemove2FA['id'].value = id;
+                        formRemove2FA['searchText'].value = "@ViewData["currentFilter"]";
+                        formRemove2FA.submit();
+                    }
+                }
+            });
+        }
+
     </script>
 }
