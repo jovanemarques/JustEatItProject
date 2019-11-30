@@ -30,6 +30,7 @@ namespace JustEatIt.Controllers
             _partnerRepo = partnerRepository;
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult Index()
         {
             // check if user is custumer or partner and redirect to right page
@@ -38,24 +39,28 @@ namespace JustEatIt.Controllers
         }
 
         [Authorize(Roles = "Partner")]
-        public ActionResult IndexPartner()
+        public async Task<IActionResult> IndexPartner()
         {
             // check user and redirect to right page
-            return View(_dishRepo.GetAll);
+            var user = await _userManager.GetUserAsync(User);
+            return View(_dishRepo.GetAll.Where(d => d.Partner.Id.Equals(user.Id)));
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomer()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomerList()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
@@ -68,32 +73,53 @@ namespace JustEatIt.Controllers
             .Where(partner =>
                 partner.Latitude >= sw_lat && partner.Longitude >= sw_lng &&
                 partner.Latitude <= ne_lat && partner.Longitude <= ne_lng
-            ).Include("Dishes").ToList();
+            );
 
-            // this could be a ViewModel also
+            var dishes = _dishRepo.GetAll
+            .Where(d =>
+                d.Partner.Latitude >= sw_lat && d.Partner.Longitude >= sw_lng &&
+                d.Partner.Latitude <= ne_lat && d.Partner.Longitude <= ne_lng
+            )
+            .OrderBy(d => d.PartnerId);
+
             String json = "";
             json += "[";
+            String previousPartnerId = "";
             var firstPartner = true;
-            foreach (var partner in partners)
+            var firstDish = true;
+            foreach (var dish in dishes)
             {
-                json += firstPartner ? "" : ",";
-                json += "   {";
-                json += "       \"id\":\"" + partner.Id + "\",";
-                json += "       \"name\":\"" + partner.Name + "\",";
-                json += "       \"location\": { \"lat\": " + partner.Latitude + ", \"lng\": " + partner.Longitude + " },";
-                json += "       \"dishes\": [";
-                var firstDish = true;
-                foreach (var dish in partner.Dishes)
+                if (previousPartnerId != dish.Partner.Id)
+                {
+                    if (!firstPartner)
+                    {
+                        json += "       ]";
+                        json += "   }";
+                        json += ",";
+                    }
+                    json += "   {";
+                    json += "       \"id\":\"" + dish.Partner.Id + "\",";
+                    json += "       \"name\":\"" + dish.Partner.Name + "\",";
+                    json += "       \"location\": { \"lat\": " + dish.Partner.Latitude + ", \"lng\": " + dish.Partner.Longitude + " },";
+                    json += "       \"dishes\": [";
+                    firstDish = true;
+                    firstPartner = false;
+                }
+                foreach (var dishAv in dish.DishAvailabilities.Where(da => da.StartDate.Date >= DateTime.Now.Date))
                 {
                     json += firstDish ? "" : ",";
-                    json += "           \"" + dish.Name + "\"";
+                    json += "           {";
+                    json += "               \"name\":\"" + dishAv.Dish.Name + "\",";
+                    json += "               \"price\":\"" + dishAv.DiscountPrice + "\"";
+                    json += "           }";
                     firstDish = false;
                 }
-                json += "       ]";
-                json += "   }";
-                firstPartner = false;
+                
+                previousPartnerId = dish.Partner.Id;
             }
             json += "       ]";
+            json += "   }";
+            json += "]";
 
             return json;
         }

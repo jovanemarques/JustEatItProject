@@ -15,7 +15,8 @@ namespace JustEatIt.Data.Entities
 
         public IQueryable<Dish> GetAll => context.Dishes
             .Include(d => d.Type)
-            .Include(d => d.Partner);
+            .Include(d => d.Partner)
+            .Include(d => d.DishAvailabilities);
 
         public int Save(Dish dish)
         {

@@ -75,7 +75,7 @@ namespace JustEatIt.Controllers
             {
                 if (dish.DishAvailabilities != null)
                 {
-                    IEnumerable<DishAvailability> dAval = dish.DishAvailabilities.Where(da => da.StartDate >= DateTime.Now && da.EndDate <= DateTime.Now);
+                    IEnumerable<DishAvailability> dAval = dish.DishAvailabilities.Where(da => da.StartDate.Date >= DateTime.Now.Date);
                     //dishesAval.AddRange(dAval);
                     foreach (var da in dAval)
                     {
