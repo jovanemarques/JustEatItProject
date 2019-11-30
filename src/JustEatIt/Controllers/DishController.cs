@@ -38,10 +38,11 @@ namespace JustEatIt.Controllers
         }
 
         [Authorize(Roles = "Partner")]
-        public ActionResult IndexPartner()
+        public async Task<IActionResult> IndexPartner()
         {
             // check user and redirect to right page
-            return View(_dishRepo.GetAll);
+            var user = await _userManager.GetUserAsync(User);
+            return View(_dishRepo.GetAll.Where(d => d.Partner.Id.Equals(user.Id)));
         }
 
         public ActionResult IndexCustomer()
