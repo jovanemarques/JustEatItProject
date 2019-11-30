@@ -40,7 +40,7 @@
                     '<h3 id="firstHeading" class="firstHeading"> <a href="/order/createByPartner/'+p.id+'">' + p.name + '</a></h3>' +
                     '<div id="bodyContent">';
                 p.dishes.forEach(d => {
-                    contentString += '<p>' + d + '</p>';
+                    contentString += '<p>' + d.name + ' - $' + d.price + '</p>';
                 });
                 contentString += '</div>' +
                     '</div>';

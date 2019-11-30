@@ -108,7 +108,10 @@ namespace JustEatIt.Controllers
                 foreach (var dishAv in dish.DishAvailabilities.Where(da => da.StartDate.Date >= DateTime.Now.Date))
                 {
                     json += firstDish ? "" : ",";
-                    json += "           \"" + dishAv.Dish.Name + "\"";
+                    json += "           {";
+                    json += "               \"name\":\"" + dishAv.Dish.Name + "\",";
+                    json += "               \"price\":\"" + dishAv.DiscountPrice + "\"";
+                    json += "           }";
                     firstDish = false;
                 }
                 
