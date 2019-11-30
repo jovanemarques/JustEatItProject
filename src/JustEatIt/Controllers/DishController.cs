@@ -299,7 +299,7 @@ namespace JustEatIt.Controllers
             var interval = avail.EndDate.Subtract(avail.StartDate).Hours;
             if (avail.StartDate.CompareTo(avail.EndDate) >= 0)
             {
-                ModelState.AddModelError("StartDate", $"The Available from date must be less than Expire date.");
+                ModelState.AddModelError("StartDate", $"The Available from must be less than Expire date field.");
             }
             else if (interval < 2)
             {
@@ -308,7 +308,12 @@ namespace JustEatIt.Controllers
             else if (interval >= 20)
             {
                 ModelState.AddModelError("StartDate", $"The Dish Availability cannot exceed twenty hours of interval.");
-            }            
+            }
+
+            if (avail.StartDate.CompareTo(DateTime.Now) < 0)
+            {
+                ModelState.AddModelError("StartDate", $"The available from field must be greater than the current date.");
+            }
             
             if ((avail.StartDate.Hour < 6) || (avail.StartDate.Hour >= 22))
             {

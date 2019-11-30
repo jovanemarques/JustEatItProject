@@ -13,6 +13,8 @@ namespace JustEatIt.Data
         {
             modelBuilder.Entity<Partner>().Property(p => p.Longitude).HasColumnType("decimal(9, 6)");
             modelBuilder.Entity<Partner>().Property(p => p.Latitude).HasColumnType("decimal(8, 6)");
+            modelBuilder.Entity<Order>().HasMany<Partner>().WithOne().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Order>().HasMany<Customer>().WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
         public DbSet<ContactUs> ContactUs { get; set; }
