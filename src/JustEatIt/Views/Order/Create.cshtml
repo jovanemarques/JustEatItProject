@@ -22,10 +22,10 @@
 }
 else
 {
-    <h1>CreateOrder</h1>
+    <h1>Dishes</h1>
 
     <p>
-        <a asp-controller="Dish" asp-action="IndexCustomer" title="Map">Map</a>
+        <a asp-controller="Dish" asp-action="IndexCustomer" title="View Map">View Map</a>
     </p>
 
     <hr />
@@ -40,8 +40,7 @@ else
                 <div class="container">
                     <div class="row">
                         <div class="col-1">
-                            @*<img src=@Url.Content("https://justeatit.s3.ca-central-1.amazonaws.com/" + @dish.Id) alt="@dish.DishAvail.Dish.Description" class="img-thumbnail" width="100"/>*@
-                            <img src='images/home/food_bag.png' alt="@Model.OrderItems[i].DishAvail.Dish.Description" class="img-thumbnail" width="100" />
+                            <img src=@Url.Content("https://justeatit.s3.ca-central-1.amazonaws.com/" + @Model.OrderItems[i].DishAvail.Dish.Id) alt="@Model.OrderItems[i].DishAvail.Dish.Description" class="img-thumbnail" width="100" />
                         </div>
                         <div class="col-8">
                             <b>@Model.OrderItems[i].DishAvail.Dish.Name</b> - @Model.OrderItems[i].DishAvail.Dish.Description

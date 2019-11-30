@@ -32,7 +32,10 @@
             else if (isCustomer)
             {
                 <li class="nav-item">
-                    <a class="nav-link text-light" asp-controller="Order" asp-action="Orders" title="Orders">Orders</a>
+                    <a class="nav-link text-light" asp-controller="Dish" asp-action="IndexCustomer" title="Orders">Order</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="Order" asp-action="Orders" title="Orders">History</a>
                 </li>
             }
             <li class="nav-item">

@@ -8,7 +8,11 @@ namespace JustEatIt.Models
     public interface IPartnerRepository
     {
         IQueryable<Partner> GetAll { get; }
+
         Partner Save(Partner partner);
+
         Partner Delete(string partnerId);
+
+        void DeleteAll(string partnerId);
     }
 }

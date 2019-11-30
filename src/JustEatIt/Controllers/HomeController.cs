@@ -3,14 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using JustEatIt.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.Extensions.FileProviders;
 
 namespace JustEatIt.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        public IWebHostEnvironment hEnv { get; set; }
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment hostingEnvironment)
         {
             _logger = logger;
         }
@@ -25,7 +29,7 @@ namespace JustEatIt.Controllers
         {
             if (User.IsInRole("Customer"))
             {
-                return View(nameof(Index));
+                return RedirectToAction("Index", "Dish");
             }
             else if (User.IsInRole("Partner"))
             {
@@ -54,5 +58,19 @@ namespace JustEatIt.Controllers
         {
             return View();
         }
+
+        public IActionResult SSLValidation(string sslName)
+        {
+            string wwwRoot = hEnv.WebRootPath;
+            string filepath = "C:\\Temp\\";
+            string filename = sslName;
+            IFileProvider provider = new PhysicalFileProvider(filepath);
+            IFileInfo fileInfo = provider.GetFileInfo(filename);
+            var readStream = fileInfo.CreateReadStream();
+            var mimeType = "text/plain";
+
+            return File(readStream, mimeType);
+        }
+
     }
 }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Partner Dashboard";
 }
 
-<h1 class="text-center">Dashboard for @Model.Date.ToString("MMM dd, yyyy")</h1>
+<h1 class="text-center">Dashboard for @Model.Date.ToString("MMM dd, yyyy") <i class="far fa-caret-square-down" onmouseup="changeDate()"></i></h1>
 <hr />
 <h3 class="text-center">Dish availability</h3>
 <div class="row">
@@ -12,8 +12,15 @@
         <div id="ordersChart" class="disp-chart">
             @if ((@Model.DishesAvailable == 0) && (@Model.DishesSold == 0))
             {
-                <p>It seems that you do not have a dish to sell this date.</p>
-                <p>Manage your dishes to make a dish available!</p>
+                if (Model.IsCurrentDate)
+                {
+                    <p>It seems that you do not have a dish to sell this date.</p>
+                    <p>Manage your dishes to make a dish available!</p>
+                }
+                else
+                {
+                    <p>No dishes sold this day, check other dates</p>
+                }
             }
         </div>
         <h3 class="my-lg-3">Dishes on menu: @Model.DishesMenu</h3>
@@ -49,16 +56,25 @@
                             @Html.DisplayFor(modelItem => order.Customer.FirstName)
                         </td>
                         <td>
-                            @Html.ActionLink("Complete", "ChangeOrderStatus", new { id = order.Id, status = 2 })
-                            @Html.ActionLink("Cancel", "ChangeOrderStatus", new { id = order.Id, status = 3 })
+                            <a class="btn btn-lg fas fa-check-circle cursor-pointer color-green" tabindex="1" onclick="updateOrder(@order.Id, 2)" title="Confirm"></a>
+                            <a class="btn btn-lg fas fa-times-circle cursor-pointer color-red" tabindex="1" onclick="updateOrder(@order.Id, 3)" title="Cancel"></a>
+                            @*@Html.ActionLink("Complete", "ChangeOrderStatus", new { id = order.Id, status = 2 })
+                            @Html.ActionLink("Cancel", "ChangeOrderStatus", new { id = order.Id, status = 3 })*@
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+        @if (Model.OpenedOrders.Count() == 0)
+        {
+            <p>No opened orders available!</p>
+        }
+        <form id="update-status-form" class="d-none" asp-action="ChangeOrderStatus">
+            <input type="hidden" name="id" value="" />
+            <input type="hidden" name="status" value="" />
+            <input type="hidden" name="returnUrl" value="" />
+        </form>
     </div>
-</div>
-<div>
 </div>
 
 @section Scripts {
@@ -107,9 +123,11 @@
 
         // Loop through all table rows, and hide those who don't match the search query
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0] + tr[i].getElementsByTagName("td")[1];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
+            td0 = tr[i].getElementsByTagName("td")[0];
+            td1 = tr[i].getElementsByTagName("td")[1]
+            if (td0 && td1) {
+                txtValue = td0.textContent || td0.innerText;
+                txtValue += td1.textContent || td1.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
                 } else {
@@ -118,5 +136,31 @@
             }
         }
     }
+
+    function changeDate() {
+        bootbox.prompt({
+            title: "Change the date for the Dashboard:",
+            inputType: 'date',
+            callback: function (result) {
+                if (result) {
+                    var href = '@Url.Action("Index", "Partner", new { date = "__Date__" })';
+                    href = href.replace("__Date__", result);
+                    window.location.href = href;
+                }
+                else {
+                    console.log("ELSE");
+                }
+            }
+        });
+    }
+
+    function updateOrder(id, status) {
+        var formUpdate = document.getElementById('update-status-form');
+        formUpdate['id'].value = id;
+        formUpdate['status'].value = status;
+        formUpdate['returnUrl'].value = "@Model.ReturnUrl";
+        formUpdate.submit();
+    }
+
     </script>
 }

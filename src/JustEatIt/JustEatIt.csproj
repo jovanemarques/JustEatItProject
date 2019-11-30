@@ -40,7 +40,13 @@
   <ItemGroup>
     <Compile Include="Data\Migrations\AppData\20191124063232_Initial.cs" />
     <Compile Include="Data\Migrations\AppData\20191124063232_Initial.Designer.cs" />
+    <Compile Include="Data\Migrations\AppData\20191130003544_OrderUpdate.cs" />
+    <Compile Include="Data\Migrations\AppData\20191130003544_OrderUpdate.Designer.cs" />
     <Compile Include="Data\Migrations\AppData\AppDataDbContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\.well-known\acme-challenge\description.txt" />
   </ItemGroup>
 
 
@@ -61,12 +67,18 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="popper.js" Version="1.16.0" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\jquery-customselect\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\.well-known\acme-challenge\bdt4bdQ51riiql7I6PJ3U2GFvnqFptv7KCd8qI1BDzc" />
   </ItemGroup>
 
 </Project>

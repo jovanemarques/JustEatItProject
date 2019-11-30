@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,14 +17,16 @@ namespace JustEatIt.Models
         [Required]
         public int Status { get; set; }
 
+        [Required]
         [ForeignKey("Customer")]
         public string CustomerId { get; set; }
 
         [Display(Name = "Date")]
-        public DateTime OrderedAt;
+        public DateTime OrderedAt { get; set; }
 
         public virtual Customer Customer { get; set; }
 
+        [Required]
         [ForeignKey("Partner")]
         public string PartnerId { get; set; }
 
@@ -39,6 +41,11 @@ namespace JustEatIt.Models
             }
 
             return result;
+        }
+
+        public string GetOrderStatus()
+        {
+            return Enum.GetName(typeof(OrderStatus), Status);
         }
     }
 }

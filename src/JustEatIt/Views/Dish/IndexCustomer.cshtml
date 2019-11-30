@@ -37,10 +37,10 @@
                 let contentString = '<div id="content">' +
                     '<div id="siteNotice">' +
                     '</div>' +
-                    '<h3 id="firstHeading" class="firstHeading">' + p.name + '</h3>' +
+                    '<h3 id="firstHeading" class="firstHeading"> <a href="/order/createByPartner/'+p.id+'">' + p.name + '</a></h3>' +
                     '<div id="bodyContent">';
                 p.dishes.forEach(d => {
-                    contentString += '<p>' + d + '</p>';
+                    contentString += '<p>' + d.name + ' - $' + d.price + '</p>';
                 });
                 contentString += '</div>' +
                     '</div>';
@@ -104,7 +104,7 @@
                 <input type="text" class="form-control" id="search" placeholder="Write a dish name" onkeyup="search(this);">
             </div>
             <div class="form-check">
-                <a asp-controller="Order" asp-action="Create" title="List">List</a>
+                <a asp-controller="Order" asp-action="Create" title="View All Dishes">View All Dishes</a>
             </div>
             <div id="map" style="height:600px"></div>
         </div>

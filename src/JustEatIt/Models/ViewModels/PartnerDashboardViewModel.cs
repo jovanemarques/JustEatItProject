@@ -19,6 +19,11 @@ namespace JustEatIt.Models.ViewModels
 
         public int DishesSold { get; set; }
 
+        public string ReturnUrl { get; set; }
+
+        public bool IsCurrentDate { get; set; }
+
         public IEnumerable<JustEatIt.Models.Order> OpenedOrders { get; set; }
+
     }
 }

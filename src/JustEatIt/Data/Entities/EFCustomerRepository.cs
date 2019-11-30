@@ -1,4 +1,5 @@
 ﻿using JustEatIt.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,26 @@ namespace JustEatIt.Data.Entities
                 context.SaveChanges();
             }
             return dbCustomer;
+        }
+
+        public void DeleteAll(string id)
+        {
+            // Remove the orders
+            var orders = context.Orders.Where(o => o.CustomerId == id).Include(o => o.Items);
+            if (orders.Count() > 0)
+            {
+                context.Orders.RemoveRange(orders);
+            }
+
+            // Remove the customer
+            var customer = context.Customers.FirstOrDefault(p => p.Id == id);
+            if (customer != null)
+            {
+                context.Customers.Remove(customer);
+            }
+
+            context.SaveChanges();
+            return;
         }
 
     }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using JustEatIt.Data.Entities;
 using JustEatIt.Models;
 using JustEatIt.Models.ViewModels.Order;
@@ -57,24 +59,33 @@ namespace JustEatIt.Controllers
 
             return View(createOrderViewModel);
         }
-/*
+
         [HttpGet]
-        [Route("createByPartner/{partnerId}")]
+        [Route("/order/createByPartner/{partnerId}")]
         public IActionResult CreateByPartner(string partnerId)
         {
-            var partners = _partnerRepository.GetAll;
-            var partner = partners.Where(p => p.Id == partnerId).FirstOrDefault();
-            var availableDishes = partner.Dishes;
-
+            //var partners = _partnerRepository.GetAll;
+            // var partner = partners.Where(p => p.Id == partnerId).FirstOrDefault();
+            var dishes = _dishRepository.GetAll.Where(d => d.Partner.Id.Equals(partnerId));
+            //List<DishAvailability> dishesAval = new List<DishAvailability>(); 
+            //var availableDishes = partner.Dishes;
             var createOrderViewModel = new CreateOrder();
 
-            foreach (var availableDish in availableDishes)
+            foreach (var dish in dishes)
             {
-                createOrderViewModel.OrderItems.Add(new OrderItem { DishAvail = availableDish, Quantity = 0 });
+                if (dish.DishAvailabilities != null)
+                {
+                    IEnumerable<DishAvailability> dAval = dish.DishAvailabilities.Where(da => da.StartDate.Date >= DateTime.Now.Date);
+                    //dishesAval.AddRange(dAval);
+                    foreach (var da in dAval)
+                    {
+                        createOrderViewModel.OrderItems.Add(new OrderItem { DishAvail = da, Quantity = 0 });
+                    }
+                }
             }
 
-            return View(createOrderViewModel);
-        }*/
+            return View("Create", createOrderViewModel);
+        }
 
         [HttpPost]
         [Route("create")]
@@ -106,8 +117,7 @@ namespace JustEatIt.Controllers
                     orderItems.FirstOrDefault().DishAvail.DishId)?.PartnerId
             };
 
-            var s = JsonConvert.SerializeObject(order);
-            TempData["order"] = s;
+            TempData["order"] = JsonConvert.SerializeObject(order);
 
             return View("CreditCard", new CreditCard());
         }

@@ -1,0 +1,1 @@
+﻿Place to challenge the SSL to verify the domain

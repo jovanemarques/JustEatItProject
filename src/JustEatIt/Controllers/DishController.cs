@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace JustEatIt.Controllers
             _partnerRepo = partnerRepository;
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult Index()
         {
             // check if user is custumer or partner and redirect to right page
@@ -38,61 +40,87 @@ namespace JustEatIt.Controllers
         }
 
         [Authorize(Roles = "Partner")]
-        public ActionResult IndexPartner()
+        public async Task<IActionResult> IndexPartner()
         {
             // check user and redirect to right page
-            return View(_dishRepo.GetAll);
+            var user = await _userManager.GetUserAsync(User);
+            return View(_dishRepo.GetAll.Where(d => d.Partner.Id.Equals(user.Id)));
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomer()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult IndexCustomerList()
         {
             // check user and redirect to right page
             return View(_dishRepo.GetAll);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public String GetDishesByLatLog(String[] ne, String[] sw)
         {
-            decimal ne_lat = Decimal.Parse(ne[0]);
-            decimal ne_lng = Decimal.Parse(ne[1]);
-            decimal sw_lat = Decimal.Parse(sw[0]);
-            decimal sw_lng = Decimal.Parse(sw[1]);
+            decimal ne_lat = Decimal.Parse(ne[0], CultureInfo.InvariantCulture);
+            decimal ne_lng = Decimal.Parse(ne[1], CultureInfo.InvariantCulture);
+            decimal sw_lat = Decimal.Parse(sw[0], CultureInfo.InvariantCulture);
+            decimal sw_lng = Decimal.Parse(sw[1], CultureInfo.InvariantCulture);
 
             var partners = _partnerRepo.GetAll
             .Where(partner =>
                 partner.Latitude >= sw_lat && partner.Longitude >= sw_lng &&
                 partner.Latitude <= ne_lat && partner.Longitude <= ne_lng
-            ).Include("Dishes").ToList();
+            );
 
-            // this could be a ViewModel also
+            var dishes = _dishRepo.GetAll
+            .Where(d =>
+                d.Partner.Latitude >= sw_lat && d.Partner.Longitude >= sw_lng &&
+                d.Partner.Latitude <= ne_lat && d.Partner.Longitude <= ne_lng
+            )
+            .OrderBy(d => d.PartnerId);
+
             String json = "";
             json += "[";
+            String previousPartnerId = "";
             var firstPartner = true;
-            foreach (var partner in partners)
+            var firstDish = true;
+            foreach (var dish in dishes)
             {
-                json += firstPartner ? "" : ",";
-                json += "   {";
-                json += "       \"name\":\"" + partner.Name + "\",";
-                json += "       \"location\": { \"lat\": " + partner.Latitude + ", \"lng\": " + partner.Longitude + " },";
-                json += "       \"dishes\": [";
-                var firstDish = true;
-                foreach (var dish in partner.Dishes)
+                if (previousPartnerId != dish.Partner.Id)
+                {
+                    if (!firstPartner)
+                    {
+                        json += "       ]";
+                        json += "   }";
+                        json += ",";
+                    }
+                    json += "   {";
+                    json += "       \"id\":\"" + dish.Partner.Id + "\",";
+                    json += "       \"name\":\"" + dish.Partner.Name + "\",";
+                    json += "       \"location\": { \"lat\": " + dish.Partner.Latitude + ", \"lng\": " + dish.Partner.Longitude + " },";
+                    json += "       \"dishes\": [";
+                    firstDish = true;
+                    firstPartner = false;
+                }
+                foreach (var dishAv in dish.DishAvailabilities.Where(da => da.StartDate.Date >= DateTime.Now.Date))
                 {
                     json += firstDish ? "" : ",";
-                    json += "           \"" + dish.Name + "\"";
+                    json += "           {";
+                    json += "               \"name\":\"" + dishAv.Dish.Name + "\",";
+                    json += "               \"price\":\"" + dishAv.DiscountPrice + "\"";
+                    json += "           }";
                     firstDish = false;
                 }
-                json += "       ]";
-                json += "   }";
-                firstPartner = false;
+                
+                previousPartnerId = dish.Partner.Id;
             }
             json += "       ]";
+            json += "   }";
+            json += "]";
 
             return json;
         }
@@ -299,7 +327,7 @@ namespace JustEatIt.Controllers
             var interval = avail.EndDate.Subtract(avail.StartDate).Hours;
             if (avail.StartDate.CompareTo(avail.EndDate) >= 0)
             {
-                ModelState.AddModelError("StartDate", $"The Available from date must be less than Expire date.");
+                ModelState.AddModelError("StartDate", $"The Available from must be less than Expire date field.");
             }
             else if (interval < 2)
             {
@@ -308,7 +336,12 @@ namespace JustEatIt.Controllers
             else if (interval >= 20)
             {
                 ModelState.AddModelError("StartDate", $"The Dish Availability cannot exceed twenty hours of interval.");
-            }            
+            }
+
+            if (avail.StartDate.CompareTo(DateTime.Now) < 0)
+            {
+                ModelState.AddModelError("StartDate", $"The available from field must be greater than the current date.");
+            }
             
             if ((avail.StartDate.Hour < 6) || (avail.StartDate.Hour >= 22))
             {
